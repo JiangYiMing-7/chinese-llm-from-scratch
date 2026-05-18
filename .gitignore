@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+
+# Data & Checkpoints (large files)
+data/raw/
+data/processed/
+checkpoints/
+*.bin
+*.pt
+*.pth
+*.safetensors
+*.ckpt
+
+# Tokenizer model (binary)
+*.model
+*.vocab
+
+# Logs & Results
+results/logs/
+*.log
+wandb/
+runs/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# System
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Secrets
+.env
+*.key
