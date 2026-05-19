@@ -1,0 +1,64 @@
+# ============================================================
+# Pilot 配置 —— 约 35M 参数，用于测试完整训练流程与架构消融
+# 目标：在约 50M tokens（100MB 中文维基子集）上跑通完整 loss 曲线，
+#        观察 PPL 变化趋势，验证生成接口，并作架构消融基准（W3）
+# ============================================================
+
+model:
+  vocab_size: 16000         # Pilot 用 16K 词表
+  n_embd: 512               # d_model
+  n_layer: 8
+  n_head: 8
+  head_dim: 64              # n_embd / n_head = 512 / 8 = 64 ✓
+  intermediate_size: 1536   # SwiGLU FFN 隐层维度（≈ 3 × n_embd）
+  block_size: 512           # context length
+  tie_embeddings: true
+  qkv_bias: true
+  norm_eps: 1.0e-5
+  rope_theta: 10000.0
+  dropout: 0.0
+
+  # --- 特殊 token IDs ---
+  pad_token_id: 0
+  unk_token_id: 1
+  bos_token_id: 2
+  eos_token_id: 3
+  endoftext_token_id: 4
+  system_token_id: 5
+  user_token_id: 6
+  assistant_token_id: 7
+
+train:
+  optimizer: adamw
+  learning_rate: 3.0e-4
+  min_lr: 3.0e-5
+  weight_decay: 0.1
+  beta1: 0.9
+  beta2: 0.95
+  grad_clip: 1.0
+
+  micro_batch_size: 16
+  grad_accum_steps: 4       # 等效 batch = 64 条序列
+  # 等效 tokens/step = 64 × 512 = 32,768
+  # 50M tokens → 约 1,526 steps
+
+  warmup_ratio: 0.02        # ≈ 31 steps warmup
+  max_epochs: 1
+  precision: bf16
+
+  log_interval: 10
+  eval_interval: 200
+  eval_iters: 100
+  save_interval: 500
+  out_dir: checkpoints/pilot
+
+  # 架构消融时可按此模板 fork 一份，修改下方字段：
+  # ablation_rope: false     # 改为可学习绝对位置编码
+  # ablation_norm: layernorm # 改为 LayerNorm
+  # ablation_ffn: gelu       # 改为 GELU FFN（中间维度 4×d_model）
+
+data:
+  tokenizer: data/tokenizer/zh_bpe_16k.model
+  train_pt: data/processed/pilot_tokens.pt
+  target_tokens: 50_000_000    # Pilot 约 50M tokens
+  val_split: 0.01

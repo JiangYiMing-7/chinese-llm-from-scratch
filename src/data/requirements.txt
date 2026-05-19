@@ -1,0 +1,7 @@
+# 数据处理 pipeline 依赖（Task 1-4）
+datasketch>=1.6.0        # MinHash 去重
+langdetect>=1.0.9        # 语言识别（回退方案）
+fasttext-wheel>=0.9.2    # 语言识别（首选，需自备 lid.176.bin）
+datasets>=2.16.0         # HuggingFace streaming 读取 CCI3-HQ
+sentencepiece>=0.1.99    # BPE tokenizer 训练
+torch>=2.0.0             # 预训练 Dataset
