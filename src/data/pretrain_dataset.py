@@ -18,6 +18,7 @@
 import argparse
 import json
 import logging
+import os
 import time
 
 logging.basicConfig(
@@ -34,6 +35,8 @@ logger = logging.getLogger("pretrain_dataset")
 def build(args):
     import sentencepiece as spm
     import torch
+
+    import numpy as np
 
     sp = spm.SentencePieceProcessor()
     sp.load(args.tokenizer)
@@ -52,43 +55,56 @@ def build(args):
     logger.info("加载 tokenizer：%s（vocab=%d, bos=%d, eos=%d, endoftext=%d）",
                 args.tokenizer, sp.get_piece_size(), bos_id, eos_id, endoftext_id)
 
-    all_ids = []          # 收集全部 token id
+    # 内存高效方案：把 token IDs 直接以 int16/int32 二进制写到临时文件，
+    # 避免 Python list 每个 int 对象占 ~28 bytes（2B tokens ≈ 56GB list vs 4GB bin）。
+    dtype_np = np.int16 if sp.get_piece_size() <= 32767 else np.int32
+    tmp_bin = args.output + ".ids_tmp.bin"
+
     n_docs = 0
+    n_tokens = 0
     t0 = time.time()
 
-    with open(args.input, "r", encoding="utf-8", errors="replace") as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            try:
-                obj = json.loads(line)
-            except json.JSONDecodeError:
-                continue
-            text = obj.get(args.text_field, "")
-            if not isinstance(text, str) or not text:
-                continue
+    try:
+        with open(tmp_bin, "wb") as bin_out, \
+             open(args.input, "r", encoding="utf-8", errors="replace") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    obj = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                text = obj.get(args.text_field, "")
+                if not isinstance(text, str) or not text:
+                    continue
 
-            ids = sp.encode(text, out_type=int)
-            if args.add_bos:
-                ids = [bos_id] + ids
-            ids.append(endoftext_id)  # 文档边界：<|endoftext|>
-            all_ids.extend(ids)
+                ids = sp.encode(text, out_type=int)
+                if args.add_bos:
+                    ids = [bos_id] + ids
+                ids.append(endoftext_id)  # 文档边界：<|endoftext|>
+                bin_out.write(np.array(ids, dtype=dtype_np).tobytes())
+                n_tokens += len(ids)
+                n_docs += 1
+                if n_docs % 50000 == 0:
+                    logger.info("已编码 %d 篇 / %d tokens / %.1fs",
+                                n_docs, n_tokens, time.time() - t0)
+                if args.max_docs and n_docs >= args.max_docs:
+                    break
 
-            n_docs += 1
-            if n_docs % 50000 == 0:
-                logger.info("已编码 %d 篇 / %d tokens / %.1fs",
-                            n_docs, len(all_ids), time.time() - t0)
-            if args.max_docs and n_docs >= args.max_docs:
-                break
+        total_tokens = n_tokens
+        logger.info("编码完成：%d 篇文档，共 %d tokens，用时 %.1fs",
+                    n_docs, total_tokens, time.time() - t0)
 
-    total_tokens = len(all_ids)
-    logger.info("编码完成：%d 篇文档，共 %d tokens，用时 %.1fs",
-                n_docs, total_tokens, time.time() - t0)
+        # 一次性读回为连续 numpy 数组（峰值内存 = n_tokens × dtype_size；
+        # 2B tokens × int16 = 4GB，远低于 Python list 的 56GB）
+        token_array = np.fromfile(tmp_bin, dtype=dtype_np)
+    finally:
+        if os.path.exists(tmp_bin):
+            os.unlink(tmp_bin)
 
-    # 用最小可容纳词表的整数类型，节省磁盘与内存
-    dtype = torch.int32 if sp.get_piece_size() > 32767 else torch.int16
-    token_tensor = torch.tensor(all_ids, dtype=dtype)
+    dtype = torch.int16 if dtype_np == np.int16 else torch.int32
+    token_tensor = torch.from_numpy(token_array.copy()).to(dtype)
 
     payload = {
         "token_ids": token_tensor,

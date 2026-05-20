@@ -145,6 +145,8 @@ def run(args):
         "--total-chars", "1e9",      # 远大于合成数据量 -> 全量纳入
         "--cci-ratio", "0.70",
         "--shuffle-buffer", "256",
+        "--no-cross-dedup",          # 验证脚本不测去重：合成语料词汇池小、
+                                     # 3-gram 重叠高，会随机丢弃 CCI 文档导致断言不稳定
     ])
     mix_datasets.mix(mix_args)
     n_mixed = sum(1 for _ in open(mixed, encoding="utf-8"))
@@ -249,8 +251,9 @@ def build_parser():
                    help="临时工作目录")
     p.add_argument("--num-docs", type=int, default=100,
                    help="每个来源的合成文档数")
-    p.add_argument("--verify-vocab-size", type=int, default=400,
-                   help="验证用的小词表大小（真实训练为 20000）")
+    p.add_argument("--verify-vocab-size", type=int, default=600,
+                   help="验证用的小词表大小（真实训练为 20000；byte_fallback=True 时"
+                        "最小值约 458，故 600 是安全下限）")
     p.add_argument("--verify-ctx", type=int, default=64,
                    help="验证用的小 context_length（真实训练为 1024）")
     p.add_argument("--seed", type=int, default=42, help="随机种子")
