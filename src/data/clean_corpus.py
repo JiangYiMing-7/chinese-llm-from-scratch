@@ -24,9 +24,17 @@ import hashlib
 import json
 import logging
 import re
+import os
 import sys
 import time
 import unicodedata
+
+from dedup_utils import (
+    ExactHashStore,
+    ensure_distinct_paths,
+    ensure_parent_dir,
+    reset_redis_prefix,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -237,12 +245,25 @@ def build_lsh(args):
 
 
 def clean(args):
+    ensure_distinct_paths(args.input, args.output, args.report)
+    ensure_parent_dir(args.output)
+    ensure_parent_dir(args.report)
+
+    if args.dedup_backend == "redis" and args.reset_dedup_store:
+        reset_redis_prefix(args.redis_host, args.redis_port, args.redis_prefix)
+
     detector = LanguageDetector(args.fasttext_model)
 
     # MinHash 去重所需组件（流式：边读边建索引）
     from datasketch import MinHash
 
     lsh = build_lsh(args)
+    exact_hashes = ExactHashStore(
+        args.dedup_backend,
+        args.redis_host,
+        args.redis_port,
+        args.redis_prefix,
+    )
 
     stats = {
         "total": 0,
@@ -256,7 +277,6 @@ def clean(args):
         "drop_dedup": 0,       # MinHash 近似去重
         "kept": 0,
     }
-    seen_hashes: set = set()   # SHA-256 精确去重集合
     # 保留语料的规模统计（O(1) 内存，只存运行聚合量）
     kept_chars = 0
     kept_min_len = None
@@ -271,7 +291,8 @@ def clean(args):
         return mh
 
     t0 = time.time()
-    out = open(args.output, "w", encoding="utf-8")
+    tmp_output = args.output + ".tmp"
+    out = open(tmp_output, "w", encoding="utf-8")
     try:
         for obj in iter_jsonl(args.input):
             if args.max_docs and stats["total"] >= args.max_docs:
@@ -317,10 +338,9 @@ def clean(args):
 
             # 步骤 4.5：SHA-256 精确去重（成本极低，先于 MinHash 运行）
             text_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
-            if text_hash in seen_hashes:
+            if exact_hashes.contains(text_hash):
                 stats["drop_exact_dup"] += 1
                 continue
-            seen_hashes.add(text_hash)
 
             # 步骤 5：MinHash 近似去重
             mh = make_minhash(text)
@@ -328,6 +348,7 @@ def clean(args):
                 stats["drop_dedup"] += 1
                 continue
             lsh.insert(f"doc-{stats['kept']}", mh)
+            exact_hashes.add(text_hash)
 
             # 通过全部过滤器，写出
             obj[args.text_field] = text
@@ -338,6 +359,7 @@ def clean(args):
             kept_min_len = n if kept_min_len is None else min(kept_min_len, n)
     finally:
         out.close()
+    os.replace(tmp_output, args.output)
 
     # 生成清洗报告
     elapsed = time.time() - t0
@@ -355,6 +377,8 @@ def clean(args):
             "repeat_ratio": args.repeat_ratio,
             "dedup_threshold": args.dedup_threshold,
             "num_perm": args.num_perm,
+            "dedup_backend": args.dedup_backend,
+            "redis_prefix": args.redis_prefix if args.dedup_backend == "redis" else None,
         },
         "counts": stats,
         "ratios": {
@@ -372,8 +396,10 @@ def clean(args):
             "estimated_tokens": int(kept_chars * 0.8),
         },
     }
-    with open(args.report, "w", encoding="utf-8") as f:
+    tmp_report = args.report + ".tmp"
+    with open(tmp_report, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
+    os.replace(tmp_report, args.report)
 
     logger.info("=" * 60)
     logger.info("清洗完成：输入 %d 篇 -> 保留 %d 篇 (%.2f%%)",
@@ -432,6 +458,8 @@ def build_parser():
     p.add_argument("--redis-port", type=int, default=6379, help="Redis 端口")
     p.add_argument("--redis-prefix", default="cleancorpus",
                    help="Redis 键前缀（多次任务隔离用）")
+    p.add_argument("--reset-dedup-store", action="store_true",
+                   help="运行前清理当前 redis-prefix 下的旧去重索引；仅 redis 后端有效")
 
     p.add_argument("--max-docs", type=int, default=None,
                    help="最多处理的输入文档数（Tiny 验证/调试用，默认全部）")

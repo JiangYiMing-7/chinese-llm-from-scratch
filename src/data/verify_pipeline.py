@@ -3,15 +3,17 @@
 """端到端验证脚本：用极小数据（默认 100 条样本）串行跑完 Task 1→2→3→4。
 
 目的：在投入 2B token 大规模处理之前，先确认整条 pipeline 的数据格式、
-接口契约从输入到 DataLoader 输出都对得上，避免跑到 Task 3 才发现
-Task 1 的输出格式不匹配。
+接口契约和跨源去重从输入到 DataLoader 输出都对得上，避免跑到 Task 3
+才发现 Task 1/2 的输出格式或去重契约不匹配。
 
 本脚本**不下载任何数据**：自动生成合成中文语料（含若干脏数据），
 其中混入过短、纯数字、重复文档，用来验证 Task 1 的过滤器确实生效。
-CCI3-HQ 一侧也用合成的本地文件代替（通过 mix_datasets 的 --cci-local）。
+CCI3-HQ 一侧也用合成的本地文件代替（通过 mix_datasets 的 --cci-local），
+并额外混入 1 篇跨源精确重复和 1 篇跨源近似重复。
 
 最终打印：
   - 清洗前 / 清洗后文档数
+  - 跨源 SHA-256 / MinHash 去重命中数
   - tokenizer 的平均每字 token 数
   - DataLoader 输出的 input_ids / labels shape 与一个样本的解码结果
 """
@@ -29,6 +31,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import clean_corpus  # noqa: E402
 import mix_datasets  # noqa: E402
 import pretrain_dataset  # noqa: E402
+import token_stats  # noqa: E402
 import train_tokenizer  # noqa: E402
 
 logging.basicConfig(
@@ -40,7 +43,7 @@ logger = logging.getLogger("verify_pipeline")
 
 # 常用中文词汇池：用「真实词汇」而非随机汉字拼句子，
 # 这样 langdetect/fasttext 才能稳定识别为中文（随机汉字会被误判成日文等）。
-_WORD_POOL = (
+_LOCAL_WORD_POOL = (
     "我们 他们 今天 明天 昨天 现在 时间 工作 学习 研究 数据 模型 训练 中国 城市 "
     "国家 社会 经济 发展 技术 科学 教育 文化 历史 世界 人类 自然 环境 生活 健康 "
     "问题 方法 结果 分析 系统 网络 信息 知识 语言 文字 内容 重要 因为 所以 但是 "
@@ -51,16 +54,26 @@ _WORD_POOL = (
     "学生 老师 学校 大学 课程 考试 成绩 朋友 家庭 父母 孩子 工程 软件 程序 算法"
 ).split()
 
+_CCI_WORD_POOL = (
+    "音乐 绘画 戏剧 小说 诗歌 美术 电影 展览 博物馆 建筑 摄影 舞蹈 民俗 "
+    "农业 土地 粮食 作物 水利 森林 草原 河流 湖泊 海洋 气候 能源 矿产 "
+    "医院 医生 护理 药物 疾病 康复 运动 营养 睡眠 心理 社区 志愿 公共 "
+    "交通 铁路 公路 航空 港口 物流 旅游 酒店 餐饮 商店 价格 消费 合同 "
+    "法律 法院 权利 责任 政策 规划 会议 报告 调查 统计 指标 风险 安全 "
+    "芯片 电路 传感 机器人 自动化 数据库 编译 网络协议 操作系统 云计算"
+).split()
 
-def gen_sentence(rng, min_words=8, max_words=18):
+
+def gen_sentence(rng, min_words=8, max_words=18, word_pool=None):
+    word_pool = word_pool or _LOCAL_WORD_POOL
     n = rng.randint(min_words, max_words)
-    return "".join(rng.choice(_WORD_POOL) for _ in range(n)) + "。"
+    return "".join(rng.choice(word_pool) for _ in range(n)) + "。"
 
 
-def gen_doc(rng, n_sent=None):
+def gen_doc(rng, n_sent=None, word_pool=None):
     # 用较长文档（语言识别在长文本上更稳定，减少合成数据的误判）
     n = n_sent or rng.randint(8, 14)
-    return "\n".join(gen_sentence(rng) for _ in range(n))
+    return "\n".join(gen_sentence(rng, word_pool=word_pool) for _ in range(n))
 
 
 def write_jsonl(path, docs):
@@ -85,7 +98,7 @@ def synth_local_corpus(rng, num_good):
     # 2 篇与首篇近似相同（仅末尾替换一个词，3-gram Jaccard >> 0.85）
     # -> 通过 SHA-256（不完全相同），触发 MinHash 近似去重
     for i in range(2):
-        replacement = _WORD_POOL[i % len(_WORD_POOL)]
+        replacement = _LOCAL_WORD_POOL[i % len(_LOCAL_WORD_POOL)]
         near_dup = docs[0][: -len(replacement)] + replacement
         docs.append(near_dup)
         dirty += 1
@@ -113,10 +126,9 @@ def run(args):
 
     local_docs, n_dirty = synth_local_corpus(rng, args.num_docs)
     write_jsonl(raw_local, local_docs)
-    write_jsonl(fake_cci, [gen_doc(rng) for _ in range(args.num_docs)])
     n_raw = len(local_docs)
-    logger.info("已生成合成语料：自建原始 %d 篇（含 %d 篇脏数据）+ 伪 CCI %d 篇",
-                n_raw, n_dirty, args.num_docs)
+    logger.info("已生成自建合成语料：原始 %d 篇（含 %d 篇脏数据）",
+                n_raw, n_dirty)
 
     # ---------------- Task 1：清洗 ----------------
     logger.info("=" * 60)
@@ -134,6 +146,19 @@ def run(args):
         report = json.load(f)
     n_clean = report["counts"]["kept"]
 
+    with open(clean_out, encoding="utf-8") as f:
+        first_clean = json.loads(next(f))["text"]
+    # CCI 中额外混入 1 篇精确重复与 1 篇近似重复，用来验证跨源去重。
+    # 其余伪 CCI 用另一套词表，避免小样本下被误判为随机近重复。
+    near_cross_dup = first_clean + "补充说明"
+    fake_cci_docs = (
+        [first_clean, near_cross_dup]
+        + [gen_doc(rng, word_pool=_CCI_WORD_POOL) for _ in range(args.num_docs)]
+    )
+    write_jsonl(fake_cci, fake_cci_docs)
+    logger.info("已生成伪 CCI：%d 篇正常文档 + 2 篇跨源重复检查样本",
+                args.num_docs)
+
     # ---------------- Task 2：混合采样 ----------------
     logger.info("=" * 60)
     logger.info("Task 2：混合采样（CCI 走 --cci-local，不下载）")
@@ -145,11 +170,10 @@ def run(args):
         "--total-chars", "1e9",      # 远大于合成数据量 -> 全量纳入
         "--cci-ratio", "0.70",
         "--shuffle-buffer", "256",
-        "--no-cross-dedup",          # 验证脚本不测去重：合成语料词汇池小、
-                                     # 3-gram 重叠高，会随机丢弃 CCI 文档导致断言不稳定
     ])
-    mix_datasets.mix(mix_args)
+    mix_summary = mix_datasets.mix(mix_args)
     n_mixed = sum(1 for _ in open(mixed, encoding="utf-8"))
+    cci_stats = mix_summary["cci_stats"]
 
     # ---------------- Task 3：训练 tokenizer ----------------
     logger.info("=" * 60)
@@ -167,15 +191,26 @@ def run(args):
         tok_stats = json.load(f)
     tokens_per_char = tok_stats["tokens_per_char"]
 
+    # 统计混合语料在真实 tokenizer 下的 token 数与来源比例
+    token_stats_path = os.path.join(workdir, "mixed_token_stats.json")
+    stats_args = token_stats.build_parser().parse_args([
+        "--input", mixed,
+        "--tokenizer", f"{model_prefix}.model",
+        "--output", token_stats_path,
+        "--log-interval", "100000",
+    ])
+    mixed_token_stats = token_stats.compute(stats_args)
+
     # ---------------- Task 4：构建预训练 Dataset ----------------
     logger.info("=" * 60)
     logger.info("Task 4：构建预训练 Dataset 并加载自检")
-    pt_path = os.path.join(workdir, "pretrain_tokens.pt")
+    pt_path = os.path.join(workdir, "pretrain_tokens.bin")
     ds_args = pretrain_dataset.build_parser().parse_args([
         "--mode", "build",
         "--input", mixed,
         "--tokenizer", f"{model_prefix}.model",
         "--output", pt_path,
+        "--output-format", "bin",
         "--context-length", str(args.verify_ctx),
     ])
     pretrain_dataset.build(ds_args)
@@ -209,9 +244,12 @@ def run(args):
           f"语言={report['counts']['drop_language']}")
     print(f"[Task 2] 混合后文档数        : {n_mixed} "
           f"（自建 {n_clean} + 伪CCI {args.num_docs}）")
+    print(f"         跨源去重            : 精确={cci_stats['cci_drop_exact_dup']} "
+          f"近似={cci_stats['cci_drop_dedup']}")
     print(f"[Task 3] 词表大小            : {tok_stats['vocab_size']}")
     print(f"         平均每字 token 数   : {tokens_per_char:.4f} "
           f"（每 token 约 {tok_stats['chars_per_token']:.2f} 字）")
+    print(f"         mixed 真实 tokens   : {mixed_token_stats['total']['tokens']}")
     print(f"         注：合成语料随机性强，该值不代表真实语料"
           f"（真实预期约 1.2~1.5）")
     print(f"[Task 4] 训练样本数          : {len(ds)}  (context={args.verify_ctx})")
@@ -230,6 +268,9 @@ def run(args):
     assert report["counts"]["drop_exact_dup"] >= 1, "SHA-256 精确去重未按预期生效"
     assert report["counts"]["drop_dedup"] >= 1, "MinHash 近似去重未按预期生效"
     assert n_mixed == n_clean + args.num_docs, "Task 2 文档数与预期不符"
+    assert cci_stats["cci_drop_exact_dup"] >= 1, "跨源 SHA-256 去重未按预期生效"
+    assert cci_stats["cci_drop_dedup"] >= 1, "跨源 MinHash 去重未按预期生效"
+    assert mixed_token_stats["total"]["documents"] == n_mixed, "token 统计文档数错误"
     assert input_ids.shape[1] == args.verify_ctx, "input_ids 序列长度错误"
     assert input_ids.shape == labels.shape, "input_ids 与 labels shape 不一致"
     assert shift_ok, "labels 不是 input_ids 右移一位"

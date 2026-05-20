@@ -25,9 +25,17 @@ import argparse
 import hashlib
 import json
 import logging
+import os
 import random
 import re
 import time
+
+from dedup_utils import (
+    ExactHashStore,
+    ensure_distinct_paths,
+    ensure_parent_dir,
+    reset_redis_prefix,
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -111,7 +119,7 @@ def iter_cci3_hq(text_field: str, hf_token: str | None = None):
 
 def build_index_from_local(
     local_path: str, text_field: str,
-    seen_hashes: set, lsh, num_perm: int,
+    exact_hashes: ExactHashStore, lsh, num_perm: int,
 ) -> int:
     """Phase 1：把已清洗本地语料的指纹全部加入全局去重索引。
 
@@ -133,8 +141,11 @@ def build_index_from_local(
             text = obj.get(text_field, "")
             if not isinstance(text, str) or not text:
                 continue
-            seen_hashes.add(hashlib.sha256(text.encode("utf-8")).hexdigest())
+            digest = hashlib.sha256(text.encode("utf-8")).hexdigest()
+            if exact_hashes.contains(digest):
+                continue
             lsh.insert(f"local-{n}", _make_minhash(text, num_perm))
+            exact_hashes.add(digest)
             n += 1
             if n % 50000 == 0:
                 logger.info("  已索引 %d 篇本地文档...", n)
@@ -143,7 +154,7 @@ def build_index_from_local(
 
 
 def iter_cci3_with_filter(
-    cci_raw, seen_hashes: set, lsh, num_perm: int,
+    cci_raw, exact_hashes: ExactHashStore, lsh, num_perm: int,
     min_len: int, max_len: int, cjk_threshold: float, stats: dict,
 ):
     """Phase 2：对 CCI3-HQ 做轻量过滤 + 跨源去重后 yield 通过的文本。
@@ -168,16 +179,16 @@ def iter_cci3_with_filter(
             continue
 
         h = hashlib.sha256(text.encode("utf-8")).hexdigest()
-        if h in seen_hashes:
+        if exact_hashes.contains(h):
             stats["cci_drop_exact_dup"] += 1
             continue
-        seen_hashes.add(h)
 
         mh = _make_minhash(text, num_perm)
         if lsh.query(mh):
             stats["cci_drop_dedup"] += 1
             continue
         lsh.insert(f"cci-{stats['cci_kept']}", mh)
+        exact_hashes.add(h)
 
         stats["cci_kept"] += 1
         yield text
@@ -223,6 +234,12 @@ def take_until_chars(source, char_budget: int, source_name: str,
 
 
 def mix(args):
+    ensure_distinct_paths(args.local_corpus, args.cci_local, args.output)
+    ensure_parent_dir(args.output)
+
+    if args.dedup_backend == "redis" and args.reset_dedup_store:
+        reset_redis_prefix(args.redis_host, args.redis_port, args.redis_prefix)
+
     rng = random.Random(args.seed)
 
     total_chars = int(args.total_chars)
@@ -238,17 +255,19 @@ def mix(args):
         "cci_total": 0, "cci_drop_length": 0, "cci_drop_language": 0,
         "cci_drop_exact_dup": 0, "cci_drop_dedup": 0, "cci_kept": 0,
     }
-    seen_hashes: set = set()
-
-    lsh = _build_lsh(
-        args.num_perm, args.dedup_threshold,
-        args.dedup_backend, args.redis_host, args.redis_port, args.redis_prefix,
-    )
-
-    # Phase 1：用本地语料初始化去重索引
     if args.cross_dedup:
+        lsh = _build_lsh(
+            args.num_perm, args.dedup_threshold,
+            args.dedup_backend, args.redis_host, args.redis_port, args.redis_prefix,
+        )
+        exact_hashes = ExactHashStore(
+            args.dedup_backend,
+            args.redis_host,
+            args.redis_port,
+            args.redis_prefix,
+        )
         build_index_from_local(args.local_corpus, args.text_field,
-                               seen_hashes, lsh, args.num_perm)
+                               exact_hashes, lsh, args.num_perm)
     else:
         logger.info("跨源去重已关闭（--no-cross-dedup）")
 
@@ -265,7 +284,7 @@ def mix(args):
     # Phase 2：CCI3-HQ 轻量过滤 + 跨源去重
     if args.cross_dedup:
         cci_filtered = iter_cci3_with_filter(
-            cci_raw, seen_hashes, lsh, args.num_perm,
+            cci_raw, exact_hashes, lsh, args.num_perm,
             min_len=args.cci_min_len, max_len=args.max_len,
             cjk_threshold=args.cci_cjk_threshold,
             stats=cci_stats,
@@ -306,7 +325,8 @@ def mix(args):
     n_written = 0
     chars_written = 0
     src_counter = {"cci3-hq": 0, "local": 0}
-    with open(args.output, "w", encoding="utf-8") as out:
+    tmp_output = args.output + ".tmp"
+    with open(tmp_output, "w", encoding="utf-8") as out:
         for obj in shuffle_buffer(merged, args.shuffle_buffer, rng):
             out.write(json.dumps(obj, ensure_ascii=False) + "\n")
             n_written += 1
@@ -315,6 +335,7 @@ def mix(args):
             if n_written % 50000 == 0:
                 logger.info("已写出 %d 篇 / %.2f 亿字",
                             n_written, chars_written / 1e8)
+    os.replace(tmp_output, args.output)
 
     elapsed = time.time() - t0
     logger.info("=" * 60)
@@ -339,6 +360,12 @@ def mix(args):
             logger.info("  %-8s %6d  (%.2f%%)", label, v, 100 * v / total)
 
     logger.info("输出文件：%s", args.output)
+    return {
+        "n_written": n_written,
+        "chars_written": chars_written,
+        "source_counts": src_counter,
+        "cci_stats": cci_stats,
+    }
 
 
 # --------------------------------------------------------------------------
@@ -391,6 +418,8 @@ def build_parser():
     p.add_argument("--redis-port", type=int, default=6379, help="Redis 端口")
     p.add_argument("--redis-prefix", default="mixcorpus",
                    help="Redis 键前缀（隔离多次任务）")
+    p.add_argument("--reset-dedup-store", action="store_true",
+                   help="运行前清理当前 redis-prefix 下的旧去重索引；仅 redis 后端有效")
     return p
 
 

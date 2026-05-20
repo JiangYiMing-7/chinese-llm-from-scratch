@@ -21,12 +21,18 @@ import logging
 import os
 import time
 
+from dedup_utils import ensure_distinct_paths, ensure_parent_dir
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     datefmt="%H:%M:%S",
 )
 logger = logging.getLogger("pretrain_dataset")
+
+
+def _metadata_path(bin_path):
+    return bin_path + ".meta.json"
 
 
 # --------------------------------------------------------------------------
@@ -37,6 +43,11 @@ def build(args):
     import torch
 
     import numpy as np
+
+    ensure_distinct_paths(args.input, args.output)
+    ensure_parent_dir(args.output)
+    if args.context_length <= 0:
+        raise ValueError("--context-length must be a positive integer")
 
     sp = spm.SentencePieceProcessor()
     sp.load(args.tokenizer)
@@ -55,8 +66,13 @@ def build(args):
     logger.info("加载 tokenizer：%s（vocab=%d, bos=%d, eos=%d, endoftext=%d）",
                 args.tokenizer, sp.get_piece_size(), bos_id, eos_id, endoftext_id)
 
+    output_format = args.output_format
+    if output_format == "auto":
+        output_format = "bin" if args.output.endswith(".bin") else "pt"
+
     # 内存高效方案：把 token IDs 直接以 int16/int32 二进制写到临时文件，
-    # 避免 Python list 每个 int 对象占 ~28 bytes（2B tokens ≈ 56GB list vs 4GB bin）。
+    # 避免 Python list 每个 int 对象占 ~28 bytes。2B tokens 的 int16 主数组
+    # 约 4GB。bin 格式可直接保留该文件，避免 torch.save 的额外峰值内存。
     dtype_np = np.int16 if sp.get_piece_size() <= 32767 else np.int32
     tmp_bin = args.output + ".ids_tmp.bin"
 
@@ -96,15 +112,39 @@ def build(args):
         logger.info("编码完成：%d 篇文档，共 %d tokens，用时 %.1fs",
                     n_docs, total_tokens, time.time() - t0)
 
-        # 一次性读回为连续 numpy 数组（峰值内存 = n_tokens × dtype_size；
-        # 2B tokens × int16 = 4GB，远低于 Python list 的 56GB）
+        if output_format == "bin":
+            metadata = {
+                "token_ids_bin": args.output,
+                "dtype": str(dtype_np().dtype),
+                "context_length": args.context_length,
+                "num_documents": n_docs,
+                "total_tokens": total_tokens,
+                "tokenizer": args.tokenizer,
+                "vocab_size": sp.get_piece_size(),
+            }
+            tmp_meta = _metadata_path(args.output) + ".tmp"
+            with open(tmp_meta, "w", encoding="utf-8") as f:
+                json.dump(metadata, f, ensure_ascii=False, indent=2)
+            os.replace(tmp_bin, args.output)
+            os.replace(tmp_meta, _metadata_path(args.output))
+            tmp_bin = None
+            n_blocks = max(0, (total_tokens - 1) // args.context_length)
+            logger.info("已保存 token bin：%s", args.output)
+            logger.info("已保存 metadata：%s", _metadata_path(args.output))
+            logger.info("按 context_length=%d 无重叠切片，可得 %d 个训练样本",
+                        args.context_length, n_blocks)
+            return
+
+        # 一次性读回为连续 numpy 数组，主数组大小为 n_tokens × dtype_size。
         token_array = np.fromfile(tmp_bin, dtype=dtype_np)
     finally:
-        if os.path.exists(tmp_bin):
+        if tmp_bin and os.path.exists(tmp_bin):
             os.unlink(tmp_bin)
 
     dtype = torch.int16 if dtype_np == np.int16 else torch.int32
-    token_tensor = torch.from_numpy(token_array.copy()).to(dtype)
+    token_tensor = torch.from_numpy(token_array)
+    if token_tensor.dtype != dtype:
+        token_tensor = token_tensor.to(dtype)
 
     payload = {
         "token_ids": token_tensor,
@@ -114,7 +154,9 @@ def build(args):
         "tokenizer": args.tokenizer,
         "vocab_size": sp.get_piece_size(),
     }
-    torch.save(payload, args.output)
+    tmp_output = args.output + ".tmp"
+    torch.save(payload, tmp_output)
+    os.replace(tmp_output, args.output)
     n_blocks = max(0, (total_tokens - 1) // args.context_length)
     logger.info("已保存：%s", args.output)
     logger.info("按 context_length=%d 无重叠切片，可得 %d 个训练样本",
@@ -140,12 +182,22 @@ class PretrainDataset(_TorchDataset):
     """
 
     def __init__(self, pt_path, context_length=None):
+        import numpy as np
         import torch
 
-        payload = torch.load(pt_path, map_location="cpu")
-        self.token_ids = payload["token_ids"]
-        self.context_length = context_length or payload["context_length"]
-        n = self.token_ids.numel()
+        self.is_memmap = pt_path.endswith(".bin")
+        if self.is_memmap:
+            with open(_metadata_path(pt_path), encoding="utf-8") as f:
+                payload = json.load(f)
+            self.token_ids = np.memmap(pt_path, dtype=np.dtype(payload["dtype"]),
+                                       mode="r")
+            self.context_length = context_length or payload["context_length"]
+            n = int(payload["total_tokens"])
+        else:
+            payload = torch.load(pt_path, map_location="cpu")
+            self.token_ids = payload["token_ids"]
+            self.context_length = context_length or payload["context_length"]
+            n = self.token_ids.numel()
         # 需要多取 1 个 token 作为最后一个位置的预测目标
         self.num_blocks = max(0, (n - 1) // self.context_length)
         logger.info("PretrainDataset：%d tokens -> %d 个样本（ctx=%d）",
@@ -161,7 +213,14 @@ class PretrainDataset(_TorchDataset):
             raise IndexError(idx)
         L = self.context_length
         start = idx * L
-        block = self.token_ids[start : start + L + 1].long()
+        block = self.token_ids[start : start + L + 1]
+        if self.is_memmap:
+            import numpy as np
+            import torch
+
+            block = torch.from_numpy(np.array(block, dtype=np.int64, copy=True))
+        else:
+            block = block.long()
         input_ids = block[:-1]
         labels = block[1:]
         return input_ids, labels
@@ -203,6 +262,8 @@ def build_parser():
                    help="SentencePiece 模型路径")
     p.add_argument("--output", default="data/processed/pretrain_tokens.pt",
                    help="处理结果 .pt 输出/加载路径")
+    p.add_argument("--output-format", choices=["auto", "pt", "bin"], default="auto",
+                   help="pt：兼容旧流程；bin：写 raw token ids + .meta.json，适合 2B token")
 
     p.add_argument("--context-length", type=int, default=1024,
                    help="切片窗口长度")

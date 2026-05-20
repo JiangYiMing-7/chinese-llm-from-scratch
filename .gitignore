@@ -13,6 +13,7 @@ env/
 data/raw/
 data/processed/
 checkpoints/
+llm/outputs/
 *.bin
 *.pt
 *.pth
@@ -22,9 +23,11 @@ checkpoints/
 # Tokenizer model (binary)
 *.model
 *.vocab
+data/tokenizer/*_stats.json
 
 # Logs & Results
 results/logs/
+results/*.json
 *.log
 wandb/
 runs/
