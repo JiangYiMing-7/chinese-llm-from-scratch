@@ -1,61 +1,46 @@
-# ============================================================
-# Tiny 配置 —— 约 6M 参数，用于代码调试与过拟合验证
-# 目标：在 1-5MB toy data 上能快速过拟合，验证前向/反向传播正确
-# ============================================================
-
 model:
-  vocab_size: 8000          # Tiny 用小词表（Debug 专用 tokenizer 训练）
-  n_embd: 256               # d_model
-  n_layer: 4
-  n_head: 4
-  head_dim: 64              # n_embd / n_head = 256 / 4 = 64 ✓
-  intermediate_size: 1024   # SwiGLU FFN 隐层维度（≈ 4 × n_embd）
-  block_size: 256           # context length
-  tie_embeddings: true      # Embedding 与 LM Head 共享权重，节省参数
-  qkv_bias: true            # 参考 Qwen2.5，低成本稳定性设计
-  norm_eps: 1.0e-5          # RMSNorm epsilon
-  rope_theta: 10000.0       # RoPE base frequency
-  dropout: 0.0              # 预训练不用 dropout
-
-  # --- 特殊 token IDs（与 train_tokenizer.py 输出对齐）---
-  pad_token_id: 0
-  unk_token_id: 1
-  bos_token_id: 2
-  eos_token_id: 3
-  endoftext_token_id: 4     # 预训练文档边界
-  system_token_id: 5
-  user_token_id: 6
-  assistant_token_id: 7
-
-train:
-  # 优化器
-  optimizer: adamw
-  learning_rate: 3.0e-4
-  min_lr: 3.0e-5            # cosine decay 终点（= lr / 10）
-  weight_decay: 0.1
-  beta1: 0.9
-  beta2: 0.95
-  grad_clip: 1.0
-
-  # Batch / 显存
-  micro_batch_size: 16
-  grad_accum_steps: 4       # 等效 batch = 16 × 4 = 64 条序列
-  # 等效 tokens/step = 64 × 256 = 16,384
-
-  # 调度
-  warmup_ratio: 0.02        # warmup 占总步数的 2%
-  max_epochs: 1             # Debug 跑 1 epoch 即可
-  precision: bf16           # bf16 / fp16 / fp32
-
-  # 日志 & 保存
-  log_interval: 10          # 每 10 step 打印一次 loss
-  eval_interval: 100
-  eval_iters: 50
-  save_interval: 500
-  out_dir: checkpoints/tiny
+  vocab_size: 8000
+  max_seq_len: 64
+  n_layers: 2
+  n_heads: 4
+  d_model: 128
+  head_dim: 32
+  ffn_hidden_dim: 384
+  dropout: 0.0
+  rope_theta: 10000.0
+  norm_eps: 1.0e-5
+  tie_embeddings: true
+  bias: false
 
 data:
-  tokenizer: data/tokenizer/zh_bpe_8k.model   # Tiny 用 8K 词表 tokenizer
-  train_pt: data/processed/debug_tokens.pt
-  target_tokens: 15_000_000   # Debug 阶段约 15M tokens
-  val_split: 0.01             # 1% 作验证集
+  train_path: data/processed/debug_tokens.pt
+  val_path: data/processed/debug_val_tokens.pt
+  val_split: 0.0
+  tokenizer_path: data/tokenizer/zh_bpe_8k.model
+  block_size: 64
+  num_workers: 0
+
+train:
+  batch_size: 8
+  max_steps: 100
+  warmup_steps: 10
+  lr: 3.0e-4
+  min_lr: 3.0e-5
+  weight_decay: 0.1
+  grad_clip: 1.0
+  log_interval: 10
+  metrics_interval: 1
+  run_dir_root: results/runs
+  run_name: tiny
+  metrics_filename: metrics.jsonl
+  hardware_metrics_interval: 10
+  eval_interval: 25
+  eval_batches: 5
+  save_interval: 50
+  save_best: true
+  best_checkpoint_name: best.pt
+  resume_from: null
+  seed: 1337
+  device: auto
+  track_token_acc: true
+  loss_ema_beta: 0.95

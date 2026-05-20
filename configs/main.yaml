@@ -1,84 +1,46 @@
-# ============================================================
-# Main 配置 —— 约 100M 参数，主实验模型（W4）
-# 目标：在约 2B tokens（中文维基 + CLUECorpus2020 + CCI3-HQ）上完整预训练
-# 参考：GPT-3 Small (125M, 12层, d=768, 12头)；Cerebras-GPT 111M (d=768, head_dim=64)
-# ============================================================
-
 model:
-  vocab_size: 20000         # 主词表 20K（SentencePiece BPE，纯中文）
-  n_embd: 768               # d_model
-  n_layer: 12
-  n_head: 12
-  head_dim: 64              # n_embd / n_head = 768 / 12 = 64 ✓
-  intermediate_size: 2048   # SwiGLU FFN 隐层维度（≈ 8/3 × d_model，对齐 LLaMA）
-  block_size: 1024          # context length
-  tie_embeddings: true      # 节省 20000×768 ≈ 15.36M 参数
-  qkv_bias: true            # 参考 Qwen2.5，约 +0.028M 参数，低成本
-  norm_eps: 1.0e-5
-  rope_theta: 10000.0
+  vocab_size: 20000
+  max_seq_len: 1024
+  n_layers: 12
+  n_heads: 12
+  d_model: 768
+  head_dim: 64
+  ffn_hidden_dim: 2048
   dropout: 0.0
-
-  # --- 特殊 token IDs（train_tokenizer.py 输出，固定不变）---
-  pad_token_id: 0           # <pad>
-  unk_token_id: 1           # <unk>
-  bos_token_id: 2           # <bos>
-  eos_token_id: 3           # <eos>（SFT 轮次结束）
-  endoftext_token_id: 4     # <|endoftext|>（预训练文档边界）
-  system_token_id: 5        # <|system|>
-  user_token_id: 6          # <|user|>
-  assistant_token_id: 7     # <|assistant|>
-
-train:
-  optimizer: adamw
-  learning_rate: 3.0e-4
-  min_lr: 3.0e-5            # cosine decay 终点 = lr × 0.1
-  weight_decay: 0.1
-  beta1: 0.9
-  beta2: 0.95
-  grad_clip: 1.0
-
-  micro_batch_size: 16
-  grad_accum_steps: 4       # 等效 batch = 64 条序列
-  # 等效 tokens/step = 64 × 1024 = 65,536
-  # 2B tokens → 约 30,517 steps（1 epoch）
-
-  warmup_ratio: 0.02        # ≈ 610 steps warmup
-  max_epochs: 1             # Main 以 1 epoch 为主；loss 稳降可追加第 2 epoch
-  precision: bf16           # H800/A100 用 bf16；RTX 4090 bf16 也支持
-
-  log_interval: 10
-  eval_interval: 1000       # 约每 65M tokens 评估一次
-  eval_iters: 200
-  save_interval: 5000       # 约每 327M tokens 保存一次 checkpoint
-  out_dir: checkpoints/main
-
-  # 成本参考（利用率 ~30%）：
-  #   H800 80GB：约 1.5 小时，约 13 元
-  #   RTX 4090 24GB：约 6.7 小时，约 13 元
-
-# SFT 超参（供龚正硕参考，W5 使用）
-sft:
-  learning_rate: 3.0e-5     # 范围 1e-5 ~ 3e-5
-  min_lr: 3.0e-6
-  weight_decay: 0.01
-  micro_batch_size: 16
-  grad_accum_steps: 1
-  warmup_ratio: 0.03
-  max_epochs: 3             # 3-5 epoch
-  precision: bf16
-  out_dir: checkpoints/sft_normal
-
-safety_sft:
-  learning_rate: 1.0e-5
-  weight_decay: 0.01
-  micro_batch_size: 8
-  grad_accum_steps: 2
-  warmup_ratio: 0.03
-  max_epochs: 3
-  out_dir: checkpoints/sft_safety
+  rope_theta: 10000.0
+  norm_eps: 1.0e-5
+  tie_embeddings: true
+  bias: false
 
 data:
-  tokenizer: data/tokenizer/zh_bpe_20k.model
-  train_pt: data/processed/pretrain_tokens.pt  # Task 4 输出
-  target_tokens: 2_000_000_000                 # 2B tokens
-  val_split: 0.01                              # 1% 验证集（约 20M tokens）
+  train_path: data/processed/pretrain_tokens.bin
+  val_path: data/processed/pretrain_val_tokens.bin
+  val_split: 0.0
+  tokenizer_path: data/tokenizer/zh_bpe_20k.model
+  block_size: 1024
+  num_workers: 0
+
+train:
+  batch_size: 16
+  max_steps: 30500
+  warmup_steps: 610
+  lr: 3.0e-4
+  min_lr: 3.0e-5
+  weight_decay: 0.1
+  grad_clip: 1.0
+  log_interval: 10
+  metrics_interval: 1
+  run_dir_root: results/runs
+  run_name: main
+  metrics_filename: metrics.jsonl
+  hardware_metrics_interval: 10
+  eval_interval: 1000
+  eval_batches: 100
+  save_interval: 5000
+  save_best: true
+  best_checkpoint_name: best.pt
+  resume_from: null
+  seed: 1337
+  device: auto
+  track_token_acc: true
+  loss_ema_beta: 0.95

@@ -27,6 +27,7 @@ data/tokenizer/*_stats.json
 
 # Logs & Results
 results/logs/
+results/runs/
 results/*.json
 *.log
 wandb/
