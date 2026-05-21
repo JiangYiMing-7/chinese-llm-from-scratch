@@ -19,9 +19,9 @@ checkpoints/
 *.safetensors
 *.ckpt
 
-# Tokenizer model (binary)
-*.model
-*.vocab
+# Tokenizer model (binary) - allow small tokenizer files in data/tokenizer/
+# *.model
+# *.vocab
 
 # Logs & Results
 results/logs/
