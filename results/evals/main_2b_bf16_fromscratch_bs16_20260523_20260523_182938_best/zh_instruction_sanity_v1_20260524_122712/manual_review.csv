@@ -1,0 +1,11 @@
+id,suite,category,profile,prompt,completion,fluency_1_5,relevance_1_5,coherence_1_5,factual_or_logic_issue,repetition_issue,overall_1_5,notes
+inst_short_001,instruction_sanity,short_answer,greedy,"用户：请只回答中国的首都是哪座城市，不要添加解释。
+助手：","中国首都是哪座城市,不要添加解释。 用户:中国首都是哪座城市,不要添加解释。 助手:中国首都是哪座城市,不要添加解释。 用户:中国首都是哪座城市,不要添加解释。 助手:中国首都是哪座城市,不要",,,,,,,
+inst_classify_001,instruction_sanity,classification,greedy,"用户：判断句子“这部电影让我非常开心”的情感，只输出“正面”或“负面”。
+助手：","判断句“我很开心”的情感,只输出“负面”或“正面”。 人物:判断句“我很开心”的情感,只输出“正面”或“负面”。 人物:判断句“我很开心”的情感,只输出“正面”或“负面”。 ",,,,,,,
+inst_extract_001,instruction_sanity,extraction,greedy,"用户：从句子“张明于2024年5月在上海参加会议”中提取城市名称，只输出城市名称。
+助手：","从“张明于2024年6月在上海参加会议”中提取城市名称,输出城市名称。 用户:从“张明于2024年7月在上海参加会议”中提取城市名称,输出城市名称。 助手:从“张明于2024年8月在上海参加",,,,,,,
+inst_json_001,instruction_sanity,json,greedy,"用户：用 JSON 格式输出北京和上海两座城市的名称，键名必须为 cities。
+助手：","用 jSON 格式输出北京和上海两座城市的名称,键名必须为 cities 格式输出北京和上海两座城市的名称,键名必须为 cities 格式输出北京和上海两座城市的名称,键名必须为 cities 格式输出北京和上海",,,,,,,
+inst_list_001,instruction_sanity,format,greedy,"用户：列出三种常见水果，每行一种，不要加序号。
+助手：","列出三种水果,每行一种,不要加序号。 用户:列出三种水果,每行一种,不要加序号。 助手:列出三种水果,每行一种,不要加序号。 用户:列出三种水果,每行一种,不要加序号。 助手:",,,,,,,

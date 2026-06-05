@@ -1,0 +1,23 @@
+{
+  "examples": 50,
+  "correct": 11,
+  "accuracy": 0.22,
+  "subjects": [
+    {
+      "subject": "accountant",
+      "examples": 50,
+      "correct": 11,
+      "accuracy": 0.22
+    }
+  ],
+  "categories": [
+    {
+      "category": "accountant",
+      "examples": 50,
+      "correct": 11,
+      "accuracy": 0.22
+    }
+  ],
+  "elapsed_sec": 1.4152977634221315,
+  "examples_per_sec": 35.3282547971404
+}

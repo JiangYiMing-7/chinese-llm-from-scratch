@@ -1,0 +1,19 @@
+20:35:57 [INFO] 已清理 Redis 前缀 'clean_pilot_main20k' 下的 0 个键
+20:35:57 [INFO] 语言识别后端：langdetect
+20:35:58 [INFO] MinHash 去重后端：redis (localhost:6379)
+20:35:58 [INFO] SHA-256 精确去重后端：redis key=clean_pilot_main20k:exact_hashes
+20:48:23 [INFO] 已处理 50000 篇，保留 47761 篇，用时 745.3s
+20:53:19 [INFO] ============================================================
+20:53:19 [INFO] 清洗完成：输入 80000 篇 -> 保留 76034 篇 (95.04%)
+20:53:19 [INFO]   drop_empty     过滤        0 篇 (0.00%)
+20:53:19 [INFO]   drop_length    过滤        2 篇 (0.00%)
+20:53:19 [INFO]   drop_language  过滤     3810 篇 (4.76%)
+20:53:19 [INFO]   drop_punct     过滤       19 篇 (0.02%)
+20:53:19 [INFO]   drop_digit     过滤       14 篇 (0.02%)
+20:53:19 [INFO]   drop_repeat    过滤        6 篇 (0.01%)
+20:53:19 [INFO]   drop_exact_dup 过滤        1 篇 (0.00%)
+20:53:19 [INFO]   drop_dedup     过滤      114 篇 (0.14%)
+20:53:19 [INFO] ------------------------------------------------------------
+20:53:19 [INFO] 保留语料规模：173.58 M 字符，约 138.9 M tokens（估算）
+20:53:19 [INFO] 文档长度  平均/最短/最长：2283 / 89 / 92667 字
+20:53:19 [INFO] 报告已写入：results/main20k/pilot_clean_report.json

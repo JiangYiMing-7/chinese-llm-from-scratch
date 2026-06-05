@@ -14,7 +14,10 @@
     * 平均每字 token 数（在抽样语料上估计）
     * 词表中单字 / 双字 / 多字 token 的数量分布
 
-训练语料通过流式迭代器喂给 SentencePieceTrainer，不落地大文本文件。
+默认训练语料通过流式迭代器喂给 SentencePieceTrainer，不落地大文本文件。
+大规模训练时也支持先把 JSONL 的 text 字段抽样落地为纯文本文件，再让
+SentencePiece 直接读取该 txt；这样避免 Python generator 在训练阶段反复
+跨 Python/C++ 边界喂数据，速度和稳定性更好。
 """
 
 import argparse
@@ -102,11 +105,68 @@ def jsonl_sentence_iterator(path, text_field, max_lines=None):
                 return
 
 
+def prepare_train_text(args):
+    """把 JSONL 的 text 字段预处理成 SentencePiece 可直接读取的纯文本文件。
+
+    输出的每一行都是一条已切短的训练句子/片段，不包含 JSON 字段名与结构符号。
+    当 args.input_sentence_size > 0 时，最多写出对应数量的句子；否则写出全部。
+    """
+    if not args.train_text:
+        raise ValueError("--train-text is required")
+
+    out_path = os.path.abspath(args.train_text)
+    os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
+
+    max_sentences = args.input_sentence_size if args.input_sentence_size > 0 else None
+    n_sentences = 0
+    n_chars = 0
+    t0 = time.time()
+    logger.info("准备 SentencePiece 纯文本训练样本：%s", args.train_text)
+    logger.info("  source=%s, max_sentences=%s",
+                args.input, max_sentences if max_sentences is not None else "all")
+
+    with open(out_path, "w", encoding="utf-8") as out:
+        for sent in jsonl_sentence_iterator(
+            args.input, args.text_field, args.max_train_lines
+        ):
+            sent = sent.replace("\n", " ").strip()
+            if not sent:
+                continue
+            out.write(sent + "\n")
+            n_sentences += 1
+            n_chars += len(sent)
+            if n_sentences % 500000 == 0:
+                logger.info("  已写出 %d 句 / %.3f 亿字",
+                            n_sentences, n_chars / 1e8)
+            if max_sentences is not None and n_sentences >= max_sentences:
+                break
+
+    logger.info("训练样本准备完成：%d 句 / %.3f 亿字，用时 %.1fs",
+                n_sentences, n_chars / 1e8, time.time() - t0)
+    logger.info("训练样本文件：%s", args.train_text)
+
+
 def train(args):
     import sentencepiece as spm
 
     os.makedirs(os.path.dirname(os.path.abspath(args.model_prefix)) or ".",
                 exist_ok=True)
+
+    spm_train_kwargs = {}
+    if args.train_text:
+        if args.rebuild_train_text or not os.path.exists(args.train_text):
+            prepare_train_text(args)
+        else:
+            logger.info("复用已有 SentencePiece 纯文本训练样本：%s", args.train_text)
+        spm_train_kwargs["input"] = args.train_text
+        # train_text 已经按 input_sentence_size 抽样/截断，这里让 SentencePiece
+        # 使用文件中的全部句子，避免再次抽样带来额外内存与时间开销。
+        spm_input_sentence_size = 0
+    else:
+        spm_train_kwargs["sentence_iterator"] = jsonl_sentence_iterator(
+            args.input, args.text_field, args.max_train_lines
+        )
+        spm_input_sentence_size = args.input_sentence_size
 
     t0 = time.time()
     logger.info("开始训练 SentencePiece BPE tokenizer ...")
@@ -122,9 +182,7 @@ def train(args):
     # 变成 <unk>，而是拆成 UTF-8 字节序列——解码时可无损还原，往返一致性
     # 达到 ~100%。这是 LLaMA / Qwen / Mistral 的标准配置。
     spm.SentencePieceTrainer.train(
-        sentence_iterator=jsonl_sentence_iterator(
-            args.input, args.text_field, args.max_train_lines
-        ),
+        **spm_train_kwargs,
         model_prefix=args.model_prefix,
         vocab_size=args.vocab_size,
         model_type="bpe",
@@ -140,7 +198,7 @@ def train(args):
             "<|user|>",        # id=6  SFT 用户轮次
             "<|assistant|>",   # id=7  SFT 助手轮次
         ],
-        input_sentence_size=args.input_sentence_size,
+        input_sentence_size=spm_input_sentence_size,
         shuffle_input_sentence=True,
         num_threads=args.num_threads,
         train_extremely_large_corpus=True,
@@ -279,8 +337,14 @@ def build_parser():
                    help="参与训练的最大句子数（0 表示全部）")
     p.add_argument("--max-train-lines", type=int, default=None,
                    help="最多读取的 jsonl 文档数（调试用，默认全部）")
-    p.add_argument("--num-threads", type=int, default=os.cpu_count() or 4,
+    p.add_argument("--num-threads", type=int, default=min(os.cpu_count() or 4, 16),
                    help="训练线程数")
+    p.add_argument("--train-text", default=None,
+                   help="可选：先把 JSONL 的 text 字段落地为纯文本训练文件，再用该 txt 训练")
+    p.add_argument("--rebuild-train-text", action="store_true",
+                   help="当 --train-text 已存在时也重新生成")
+    p.add_argument("--prepare-train-text-only", action="store_true",
+                   help="只生成 --train-text，不训练 tokenizer")
 
     p.add_argument("--analyze-sample-lines", type=int, default=100000,
                    help="估计平均每字 token 数时抽样的句子数")
@@ -291,7 +355,9 @@ def build_parser():
 
 if __name__ == "__main__":
     args = build_parser().parse_args()
-    if args.analyze_only:
+    if args.prepare_train_text_only:
+        prepare_train_text(args)
+    elif args.analyze_only:
         analyze(args)
     else:
         train(args)

@@ -1,0 +1,17 @@
+18:23:16 [INFO] tokenizer=data/tokenizer/zh_bpe_20k.model vocab=20000
+18:23:17 [INFO] model params: 100.31 M
+18:23:17 [INFO] train samples=3885325 val samples=39245 device=cuda
+18:23:17 [INFO] precision=bf16 autocast=True cuda_bf16_supported=True cuda_matmul_allow_tf32=False cudnn_allow_tf32=True
+18:23:17 [INFO] run_dir=results/runs/bf16_smoke_bs16_100steps_20260523_20260523_182316
+18:23:19 [INFO] step=1 loss=10.0723 ema=10.0723 ppl=23676.88 acc=0.0000 grad_norm=4.1856 lr=1.50e-04 tok/s=15400.1 mem=1236.8MB peak=26302.3MB gpu=4.0%
+18:23:21 [INFO] step=10 loss=8.4841 ema=9.6715 ppl=4837.36 acc=0.0604 grad_norm=0.8893 lr=2.97e-04 tok/s=64348.7 mem=1236.8MB peak=27106.9MB gpu=84.0%
+18:23:25 [INFO] step=20 loss=8.1136 ema=9.0766 ppl=3339.60 acc=0.0656 grad_norm=0.5279 lr=2.80e-04 tok/s=64428.3 mem=1236.8MB peak=27106.9MB gpu=99.0%
+18:23:28 [INFO] step=30 loss=8.0414 ema=8.6675 ppl=3106.86 acc=0.0601 grad_norm=0.7065 lr=2.53e-04 tok/s=64420.6 mem=1236.8MB peak=27106.9MB gpu=77.0%
+18:23:31 [INFO] step=40 loss=8.0209 ema=8.4241 ppl=3044.03 acc=0.0562 grad_norm=0.6815 lr=2.16e-04 tok/s=64260.9 mem=1236.8MB peak=27106.9MB gpu=99.0%
+18:23:34 [INFO] step=50 loss=7.9940 ema=8.2833 ppl=2963.02 acc=0.0673 grad_norm=0.4611 lr=1.74e-04 tok/s=64299.4 mem=1236.8MB peak=27106.9MB gpu=92.0%
+18:23:36 [INFO] step=60 loss=8.0791 ema=8.1797 ppl=3226.35 acc=0.0600 grad_norm=0.4581 lr=1.31e-04 tok/s=64424.9 mem=1236.8MB peak=27106.9MB gpu=99.0%
+18:23:39 [INFO] step=70 loss=7.9662 ema=8.1101 ppl=2882.01 acc=0.0636 grad_norm=0.5644 lr=9.14e-05 tok/s=64776.1 mem=1236.8MB peak=27106.9MB gpu=78.0%
+18:23:42 [INFO] step=80 loss=7.9582 ema=8.0717 ppl=2859.02 acc=0.0692 grad_norm=0.3942 lr=5.95e-05 tok/s=64839.9 mem=1236.8MB peak=27106.9MB gpu=99.0%
+18:23:45 [INFO] step=90 loss=8.0907 ema=8.0383 ppl=3263.94 acc=0.0659 grad_norm=0.4992 lr=3.83e-05 tok/s=65058.3 mem=1236.8MB peak=27106.9MB gpu=99.0%
+18:23:48 [INFO] step=100 loss=7.9273 ema=8.0215 ppl=2772.00 acc=0.0624 grad_norm=0.4760 lr=3.01e-05 tok/s=65031.9 mem=1236.8MB peak=27106.9MB gpu=77.0%
+18:23:50 [INFO] step=100 val_loss=7.9597 val_ppl=2863.19 val_acc=0.0676

@@ -1,0 +1,23 @@
+{
+  "examples": 50,
+  "correct": 11,
+  "accuracy": 0.22,
+  "subjects": [
+    {
+      "subject": "agronomy",
+      "examples": 50,
+      "correct": 11,
+      "accuracy": 0.22
+    }
+  ],
+  "categories": [
+    {
+      "category": "agronomy",
+      "examples": 50,
+      "correct": 11,
+      "accuracy": 0.22
+    }
+  ],
+  "elapsed_sec": 1.0233149342238903,
+  "examples_per_sec": 48.860813350604865
+}

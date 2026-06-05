@@ -1,0 +1,10 @@
+id,suite,category,profile,prompt,completion,fluency_1_5,relevance_1_5,coherence_1_5,factual_or_logic_issue,repetition_issue,overall_1_5,notes
+multi_en_001,multilingual_probe,english_completion,greedy,"Natural language processing models can learn patterns from text data, but small models often","models, and they are not to be approached. american jo rnal of the patterns of the patterns of the patterns of the patterns of the patterns of the patterns of",,,,,,,
+multi_mix_001,multilingual_probe,mixed_language,greedy,在训练脚本中，learning rate scheduler 的作用是,"帮助我们快速地学习脚本语言,并帮助我们快速地学习脚本语言。 脚本语言是学习脚本语言的基础,它帮助我们快速地学习脚本语言。 脚本语言是学习脚本语言的基础,它帮助我们快速地学习脚本语言。 脚本",,,,,,,
+multi_translate_001,multilingual_probe,translation,greedy,"用户：请把“data quality is important for model training”翻译成中文。
+助手：",simple simple simple simple simple simple simple simple simple simple simple simple simple simple simple simple,,,,,,,
+multi_code_001,multilingual_probe,code_mixed,greedy,"下面的 Python 函数用于计算列表总和：
+def sum_list(xs):
+    total = 0
+    for x in xs:
+        ",xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: xs: x,,,,,,,

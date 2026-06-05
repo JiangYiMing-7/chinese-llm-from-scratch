@@ -1,0 +1,37 @@
+{
+  "input": "/root/tl/chinese-llm-from-scratch/results/verify_pipeline_debug/mixed_corpus.jsonl",
+  "tokenizer": "/root/tl/chinese-llm-from-scratch/results/verify_pipeline_debug/verify_bpe.model",
+  "elapsed_seconds": 0.0,
+  "total": {
+    "documents": 600,
+    "chars": 187728,
+    "tokens": 90728,
+    "tokens_per_char": 0.483295,
+    "avg_doc_chars": 312.9,
+    "avg_doc_tokens": 151.2,
+    "token_ratio": 1.0,
+    "char_ratio": 1.0
+  },
+  "by_source": {
+    "cci3-hq": {
+      "documents": 300,
+      "chars": 96922,
+      "tokens": 45163,
+      "tokens_per_char": 0.465973,
+      "avg_doc_chars": 323.1,
+      "avg_doc_tokens": 150.5,
+      "token_ratio": 0.497785,
+      "char_ratio": 0.51629
+    },
+    "local": {
+      "documents": 300,
+      "chars": 90806,
+      "tokens": 45565,
+      "tokens_per_char": 0.501784,
+      "avg_doc_chars": 302.7,
+      "avg_doc_tokens": 151.9,
+      "token_ratio": 0.502215,
+      "char_ratio": 0.48371
+    }
+  }
+}

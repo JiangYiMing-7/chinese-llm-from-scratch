@@ -1,0 +1,47 @@
+{
+  "input": "/root/tl/chinese-llm-from-scratch/results/verify_pipeline_debug/raw_local.jsonl",
+  "output": "/root/tl/chinese-llm-from-scratch/results/verify_pipeline_debug/local_clean.jsonl",
+  "elapsed_seconds": 0.8,
+  "params": {
+    "min_len": 50,
+    "max_len": 100000,
+    "lang_threshold": 0.5,
+    "punct_ratio": 0.3,
+    "digit_ratio": 0.4,
+    "repeat_ratio": 0.3,
+    "dedup_threshold": 0.85,
+    "num_perm": 128,
+    "dedup_backend": "memory",
+    "redis_prefix": null
+  },
+  "counts": {
+    "total": 314,
+    "drop_empty": 0,
+    "drop_length": 5,
+    "drop_language": 3,
+    "drop_punct": 0,
+    "drop_digit": 0,
+    "drop_repeat": 0,
+    "drop_exact_dup": 0,
+    "drop_dedup": 6,
+    "kept": 300
+  },
+  "ratios": {
+    "drop_empty": 0.0,
+    "drop_length": 0.0159,
+    "drop_language": 0.0096,
+    "drop_punct": 0.0,
+    "drop_digit": 0.0,
+    "drop_repeat": 0.0,
+    "drop_exact_dup": 0.0,
+    "drop_dedup": 0.0191,
+    "kept": 0.9554
+  },
+  "corpus": {
+    "kept_chars": 90806,
+    "avg_doc_len": 302.7,
+    "min_doc_len": 171,
+    "max_doc_len": 441,
+    "estimated_tokens": 72644
+  }
+}

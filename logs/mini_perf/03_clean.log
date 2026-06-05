@@ -1,0 +1,17 @@
+20:11:22 [INFO] 语言识别后端：langdetect
+20:11:22 [INFO] MinHash 去重后端：memory（大规模请改用 --dedup-backend redis）
+20:11:22 [INFO] SHA-256 精确去重后端：memory
+20:11:35 [INFO] ============================================================
+20:11:35 [INFO] 清洗完成：输入 300 篇 -> 保留 287 篇 (95.67%)
+20:11:35 [INFO]   drop_empty     过滤        0 篇 (0.00%)
+20:11:35 [INFO]   drop_length    过滤        0 篇 (0.00%)
+20:11:35 [INFO]   drop_language  过滤       13 篇 (4.33%)
+20:11:35 [INFO]   drop_punct     过滤        0 篇 (0.00%)
+20:11:35 [INFO]   drop_digit     过滤        0 篇 (0.00%)
+20:11:35 [INFO]   drop_repeat    过滤        0 篇 (0.00%)
+20:11:35 [INFO]   drop_exact_dup 过滤        0 篇 (0.00%)
+20:11:35 [INFO]   drop_dedup     过滤        0 篇 (0.00%)
+20:11:35 [INFO] ------------------------------------------------------------
+20:11:35 [INFO] 保留语料规模：2.58 M 字符，约 2.1 M tokens（估算）
+20:11:35 [INFO] 文档长度  平均/最短/最长：8997 / 98 / 50948 字
+20:11:35 [INFO] 报告已写入：results/mini_perf/clean_report.json

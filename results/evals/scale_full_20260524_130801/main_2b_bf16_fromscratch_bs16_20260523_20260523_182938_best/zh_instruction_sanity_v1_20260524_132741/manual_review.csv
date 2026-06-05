@@ -1,0 +1,25 @@
+id,suite,category,profile,prompt,completion,fluency_1_5,relevance_1_5,coherence_1_5,factual_or_logic_issue,repetition_issue,overall_1_5,notes
+inst_short_001,instruction_sanity,short_answer,greedy,"用户：请只回答中国的首都是哪座城市，不要添加解释。
+助手：","中国首都是哪座城市,不要添加解释。 用户:中国首都是哪座城市,不要添加解释。 助手:中国首都是哪座城市,不要添加解释。 用户:中国首都是哪座城市,不要添加解释。 助手:中国首都是哪座城市,不要",,,,,,,
+inst_classify_001,instruction_sanity,classification,greedy,"用户：判断句子“这部电影让我非常开心”的情感，只输出“正面”或“负面”。
+助手：","判断句“我很开心”的情感,只输出“负面”或“正面”。 人物:判断句“我很开心”的情感,只输出“正面”或“负面”。 人物:判断句“我很开心”的情感,只输出“正面”或“负面”。 ",,,,,,,
+inst_extract_001,instruction_sanity,extraction,greedy,"用户：从句子“张明于2024年5月在上海参加会议”中提取城市名称，只输出城市名称。
+助手：","从“张明于2024年6月在上海参加会议”中提取城市名称,输出城市名称。 用户:从“张明于2024年7月在上海参加会议”中提取城市名称,输出城市名称。 助手:从“张明于2024年8月在上海参加",,,,,,,
+inst_json_001,instruction_sanity,json,greedy,"用户：用 JSON 格式输出北京和上海两座城市的名称，键名必须为 cities。
+助手：","用 jSON 格式输出北京和上海两座城市的名称,键名必须为 cities 格式输出北京和上海两座城市的名称,键名必须为 cities 格式输出北京和上海两座城市的名称,键名必须为 cities 格式输出北京和上海",,,,,,,
+inst_list_001,instruction_sanity,format,greedy,"用户：列出三种常见水果，每行一种，不要加序号。
+助手：","列出三种水果,每行一种,不要加序号。 用户:列出三种水果,每行一种,不要加序号。 助手:列出三种水果,每行一种,不要加序号。 用户:列出三种水果,每行一种,不要加序号。 助手:",,,,,,,
+inst_rewrite_001,instruction_sanity,rewriting,greedy,"用户：把“这个办法挺好的”改写为正式书面语，只输出改写后的句子。
+助手：","把“这个办法挺好的”改写为正式书面语,只输出改写后的句子。 用户:把“这个办法挺好的”改写为正式书面语,只输出改写后的句子。 用户:把“这个办法挺好的”改写为正式书面语,只输出",,,,,,,
+inst_translate_001,instruction_sanity,translation,greedy,"用户：将“Machine learning improves with high-quality data.”翻译为中文，只输出译文。
+助手：","将“Machine learning improves with high-quality data.”翻译为中文,只输出译文。 用户:将“Machine learning improves with high-quality data.”翻译为中文,只输出",,,,,,,
+inst_math_001,instruction_sanity,arithmetic,greedy,"用户：计算 23 + 19，只输出阿拉伯数字答案。
+助手：",用户:输入阿拉伯数字答案 助手: 用户:输入阿拉伯数字答案 助手: 用户:输入阿拉伯数字答案 助手: 用户:输入阿拉伯数字答案 助手: 用户:输入阿拉伯数字答案 助手: 用户:输入阿拉伯数字答案 助手: 用户:输入,,,,,,,
+inst_constraint_001,instruction_sanity,constraint,greedy,"用户：用不超过二十个汉字描述春天。
+助手：",用一组汉字描述春天。 用户:用一组汉字描述春天。 助手:用一组汉字描述春天。 用户:用一组汉字描述春天。 助手:用一组汉字描述春天。 用户:用一组汉字描述春天。 助手:用一组汉字,,,,,,,
+inst_summary_001,instruction_sanity,summary,greedy,"用户：请用一句话概括：图书馆延长开放时间后，学生晚间自习更加方便，但工作人员排班压力有所增加。
+助手：","请用一句话概括:图书馆延长开放时间后,学生晚间自习更加方便,但工作人员排班压力有所增加。 教师:请用一句话概括:图书馆延长开放时间后,学生晚间自习更加方便,但工作人员排班压力有所增加。 教师:请用",,,,,,,
+inst_keyword_001,instruction_sanity,extraction,greedy,"用户：从“本次会议讨论了数据清洗、模型训练和结果评估”中提取三个关键词，用顿号分隔。
+助手：","从“本次会议讨论了数据清洗、模型训练和结果评估”中提取三个关键词,用顿号分隔。 数据清洗:从“本次会议讨论了数据清洗、模型训练和结果评估”中提取三个关键词,用顿号分隔。 数据分析:从“本次会议",,,,,,,
+inst_safe_benign_001,instruction_sanity,benign_instruction,greedy,"用户：请用两句话说明定期备份学习笔记的好处。
+助手：",请用两句话说明定期备份学习笔记的好处。 用户:请用两句话说明定期备份学习笔记的好处。 助手:请用两句话说明定期备份学习笔记的好处。 用户:请用两句话说明定期备份学习笔记的好处。 助手:,,,,,,,

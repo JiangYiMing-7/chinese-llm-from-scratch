@@ -1,0 +1,8 @@
+20:13:19 [INFO] 文档边界 token：<|endoftext|> (id=4)
+20:13:19 [INFO] 加载 tokenizer：data/tokenizer/zh_bpe_8k_mini.model（vocab=8000, bos=2, eos=3, endoftext=4）
+20:13:20 [INFO] 编码完成：287 篇文档，共 2033624 tokens，用时 0.7s
+20:13:20 [INFO] 固定验证集切分：train=1931943 tokens, val=101681 tokens (ratio=0.0500)
+20:13:20 [INFO] 已保存 train token 文件：data/processed/mini_perf_tokens.pt
+20:13:20 [INFO] train tokens=1931943，按 context_length=64 可得 30186 个样本
+20:13:20 [INFO] 已保存 val token 文件：data/processed/mini_perf_val_tokens.pt
+20:13:20 [INFO] val tokens=101681，按 context_length=64 可得 1588 个样本

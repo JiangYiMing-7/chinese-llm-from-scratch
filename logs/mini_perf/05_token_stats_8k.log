@@ -1,0 +1,4 @@
+20:13:18 [INFO] ============================================================
+20:13:18 [INFO] 统计完成：287 篇 / 2.58 M chars / 2.03 M tokens
+20:13:18 [INFO] unknown: 2.03 M tokens (100.00%), 0.7874 tokens/char
+20:13:18 [INFO] 报告已写入：results/mini_perf/token_stats_8k.json

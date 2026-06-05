@@ -1,0 +1,6 @@
+auto_pass,category,cjk_ratio,completion_tokens,duplicate_4gram_ratio,generation_tokens_per_sec,id,max_char_run,profile,suite
+,narrative,0.8076923076923077,128,0.8425196850393701,135.21279567150796,gen_narrative_001,2,greedy,generation
+,narrative,0.7876712328767124,128,0.8741258741258742,237.20222790230156,gen_narrative_002,1,greedy,generation
+,narrative,0.8046875,128,0.96,237.8323216274721,gen_narrative_003,1,greedy,generation
+,expository,0.813953488372093,128,0.8679245283018868,236.99161823719982,gen_expository_001,1,greedy,generation
+,expository,0.9215686274509803,128,0.7960199004975125,236.86027028540812,gen_expository_002,1,greedy,generation

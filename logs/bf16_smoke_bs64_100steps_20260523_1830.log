@@ -1,0 +1,29 @@
+18:28:08 [INFO] tokenizer=data/tokenizer/zh_bpe_20k.model vocab=20000
+18:28:10 [INFO] model params: 100.31 M
+18:28:10 [INFO] train samples=3885325 val samples=39245 device=cuda
+18:28:10 [INFO] precision=bf16 autocast=True cuda_bf16_supported=True cuda_matmul_allow_tf32=False cudnn_allow_tf32=True
+18:28:10 [INFO] run_dir=results/runs/bf16_smoke_bs64_100steps_20260523_20260523_182808
+Traceback (most recent call last):
+  File "/root/autodl-tmp/chinese-llm-from-scratch/pretrain/train_pretrain.py", line 19, in <module>
+    main()
+  File "/root/autodl-tmp/chinese-llm-from-scratch/pretrain/train_pretrain.py", line 15, in main
+    pretrain(args.config)
+  File "/root/autodl-tmp/chinese-llm-from-scratch/pretrain/pretrain.py", line 676, in pretrain
+    metrics = train_one_step(
+              ^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/chinese-llm-from-scratch/pretrain/pretrain.py", line 444, in train_one_step
+    output = model(input_ids, labels=labels)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/chinese-llm/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1778, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/chinese-llm/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1789, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/root/autodl-tmp/chinese-llm-from-scratch/model/causal_lm.py", line 53, in forward
+    loss = F.cross_entropy(
+           ^^^^^^^^^^^^^^^^
+  File "/root/miniconda3/envs/chinese-llm/lib/python3.11/site-packages/torch/nn/functional.py", line 3507, in cross_entropy
+    return torch._C._nn.cross_entropy_loss(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 4.88 GiB. GPU 0 has a total capacity of 94.97 GiB of which 956.12 MiB is free. Including non-PyTorch memory, this process has 94.03 GiB memory in use. Of the allocated memory 91.10 GiB is allocated by PyTorch, and 2.27 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

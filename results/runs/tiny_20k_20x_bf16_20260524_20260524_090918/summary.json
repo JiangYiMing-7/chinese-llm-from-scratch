@@ -1,0 +1,16 @@
+{
+  "run_id": "tiny_20k_20x_bf16_20260524_20260524_090918",
+  "run_dir": "results/runs/tiny_20k_20x_bf16_20260524_20260524_090918",
+  "status": "completed",
+  "started_at": "2026-05-24T09:09:18+0800",
+  "ended_at": "2026-05-24T09:14:51+0800",
+  "step": 11374,
+  "tokens_seen": 186351616,
+  "precision": "bf16",
+  "elapsed_sec": 331.67409658432007,
+  "best_val_loss": 4.727368330955505,
+  "latest_checkpoint": "results/runs/tiny_20k_20x_bf16_20260524_20260524_090918/checkpoints/ckpt.pt",
+  "best_checkpoint": "results/runs/tiny_20k_20x_bf16_20260524_20260524_090918/checkpoints/best.pt",
+  "metrics_path": "results/runs/tiny_20k_20x_bf16_20260524_20260524_090918/metrics.jsonl",
+  "config_snapshot_path": "results/runs/tiny_20k_20x_bf16_20260524_20260524_090918/config.yaml"
+}

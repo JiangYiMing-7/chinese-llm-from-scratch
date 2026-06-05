@@ -1,0 +1,65 @@
+{
+  "generations": 5,
+  "groups": [
+    {
+      "suite": "instruction_sanity",
+      "category": "classification",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.6666666666666666,
+      "mean_duplicate_4gram_ratio": 0.95,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 584.100314247002
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "extraction",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.671875,
+      "mean_duplicate_4gram_ratio": 0.9016393442622951,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 624.3976133218971
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "format",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.6666666666666666,
+      "mean_duplicate_4gram_ratio": 0.95,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 632.5602244906319
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "json",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.2972972972972973,
+      "mean_duplicate_4gram_ratio": 0.9014084507042254,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 644.2399887980888
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "short_answer",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.25,
+      "mean_duplicate_4gram_ratio": 0.8688524590163934,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 130.99837188295416
+    }
+  ]
+}

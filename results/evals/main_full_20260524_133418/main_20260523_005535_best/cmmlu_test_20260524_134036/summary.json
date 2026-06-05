@@ -1,0 +1,815 @@
+{
+  "examples": 11582,
+  "correct": 2860,
+  "accuracy": 0.24693489898117768,
+  "subjects": [
+    {
+      "subject": "agronomy",
+      "examples": 169,
+      "correct": 50,
+      "accuracy": 0.2958579881656805
+    },
+    {
+      "subject": "anatomy",
+      "examples": 148,
+      "correct": 40,
+      "accuracy": 0.2702702702702703
+    },
+    {
+      "subject": "ancient_chinese",
+      "examples": 164,
+      "correct": 52,
+      "accuracy": 0.3170731707317073
+    },
+    {
+      "subject": "arts",
+      "examples": 160,
+      "correct": 40,
+      "accuracy": 0.25
+    },
+    {
+      "subject": "astronomy",
+      "examples": 165,
+      "correct": 42,
+      "accuracy": 0.2545454545454545
+    },
+    {
+      "subject": "business_ethics",
+      "examples": 209,
+      "correct": 55,
+      "accuracy": 0.2631578947368421
+    },
+    {
+      "subject": "chinese_civil_service_exam",
+      "examples": 160,
+      "correct": 43,
+      "accuracy": 0.26875
+    },
+    {
+      "subject": "chinese_driving_rule",
+      "examples": 131,
+      "correct": 33,
+      "accuracy": 0.25190839694656486
+    },
+    {
+      "subject": "chinese_food_culture",
+      "examples": 136,
+      "correct": 34,
+      "accuracy": 0.25
+    },
+    {
+      "subject": "chinese_foreign_policy",
+      "examples": 107,
+      "correct": 23,
+      "accuracy": 0.21495327102803738
+    },
+    {
+      "subject": "chinese_history",
+      "examples": 323,
+      "correct": 78,
+      "accuracy": 0.24148606811145512
+    },
+    {
+      "subject": "chinese_literature",
+      "examples": 204,
+      "correct": 52,
+      "accuracy": 0.2549019607843137
+    },
+    {
+      "subject": "chinese_teacher_qualification",
+      "examples": 179,
+      "correct": 45,
+      "accuracy": 0.25139664804469275
+    },
+    {
+      "subject": "clinical_knowledge",
+      "examples": 237,
+      "correct": 57,
+      "accuracy": 0.24050632911392406
+    },
+    {
+      "subject": "college_actuarial_science",
+      "examples": 106,
+      "correct": 21,
+      "accuracy": 0.19811320754716982
+    },
+    {
+      "subject": "college_education",
+      "examples": 107,
+      "correct": 23,
+      "accuracy": 0.21495327102803738
+    },
+    {
+      "subject": "college_engineering_hydrology",
+      "examples": 106,
+      "correct": 31,
+      "accuracy": 0.29245283018867924
+    },
+    {
+      "subject": "college_law",
+      "examples": 108,
+      "correct": 32,
+      "accuracy": 0.2962962962962963
+    },
+    {
+      "subject": "college_mathematics",
+      "examples": 105,
+      "correct": 22,
+      "accuracy": 0.20952380952380953
+    },
+    {
+      "subject": "college_medical_statistics",
+      "examples": 106,
+      "correct": 21,
+      "accuracy": 0.19811320754716982
+    },
+    {
+      "subject": "college_medicine",
+      "examples": 273,
+      "correct": 69,
+      "accuracy": 0.25274725274725274
+    },
+    {
+      "subject": "computer_science",
+      "examples": 204,
+      "correct": 39,
+      "accuracy": 0.19117647058823528
+    },
+    {
+      "subject": "computer_security",
+      "examples": 171,
+      "correct": 46,
+      "accuracy": 0.26900584795321636
+    },
+    {
+      "subject": "conceptual_physics",
+      "examples": 147,
+      "correct": 33,
+      "accuracy": 0.22448979591836735
+    },
+    {
+      "subject": "construction_project_management",
+      "examples": 139,
+      "correct": 29,
+      "accuracy": 0.20863309352517986
+    },
+    {
+      "subject": "economics",
+      "examples": 159,
+      "correct": 35,
+      "accuracy": 0.22012578616352202
+    },
+    {
+      "subject": "education",
+      "examples": 163,
+      "correct": 46,
+      "accuracy": 0.2822085889570552
+    },
+    {
+      "subject": "electrical_engineering",
+      "examples": 172,
+      "correct": 40,
+      "accuracy": 0.23255813953488372
+    },
+    {
+      "subject": "elementary_chinese",
+      "examples": 252,
+      "correct": 59,
+      "accuracy": 0.23412698412698413
+    },
+    {
+      "subject": "elementary_commonsense",
+      "examples": 198,
+      "correct": 50,
+      "accuracy": 0.25252525252525254
+    },
+    {
+      "subject": "elementary_information_and_technology",
+      "examples": 238,
+      "correct": 67,
+      "accuracy": 0.2815126050420168
+    },
+    {
+      "subject": "elementary_mathematics",
+      "examples": 230,
+      "correct": 43,
+      "accuracy": 0.18695652173913044
+    },
+    {
+      "subject": "ethnology",
+      "examples": 135,
+      "correct": 32,
+      "accuracy": 0.23703703703703705
+    },
+    {
+      "subject": "food_science",
+      "examples": 143,
+      "correct": 29,
+      "accuracy": 0.20279720279720279
+    },
+    {
+      "subject": "genetics",
+      "examples": 176,
+      "correct": 43,
+      "accuracy": 0.24431818181818182
+    },
+    {
+      "subject": "global_facts",
+      "examples": 149,
+      "correct": 35,
+      "accuracy": 0.2348993288590604
+    },
+    {
+      "subject": "high_school_biology",
+      "examples": 169,
+      "correct": 48,
+      "accuracy": 0.28402366863905326
+    },
+    {
+      "subject": "high_school_chemistry",
+      "examples": 132,
+      "correct": 39,
+      "accuracy": 0.29545454545454547
+    },
+    {
+      "subject": "high_school_geography",
+      "examples": 118,
+      "correct": 26,
+      "accuracy": 0.22033898305084745
+    },
+    {
+      "subject": "high_school_mathematics",
+      "examples": 164,
+      "correct": 42,
+      "accuracy": 0.25609756097560976
+    },
+    {
+      "subject": "high_school_physics",
+      "examples": 110,
+      "correct": 31,
+      "accuracy": 0.2818181818181818
+    },
+    {
+      "subject": "high_school_politics",
+      "examples": 143,
+      "correct": 37,
+      "accuracy": 0.25874125874125875
+    },
+    {
+      "subject": "human_sexuality",
+      "examples": 126,
+      "correct": 33,
+      "accuracy": 0.2619047619047619
+    },
+    {
+      "subject": "international_law",
+      "examples": 185,
+      "correct": 45,
+      "accuracy": 0.24324324324324326
+    },
+    {
+      "subject": "journalism",
+      "examples": 172,
+      "correct": 41,
+      "accuracy": 0.23837209302325582
+    },
+    {
+      "subject": "jurisprudence",
+      "examples": 411,
+      "correct": 102,
+      "accuracy": 0.24817518248175183
+    },
+    {
+      "subject": "legal_and_moral_basis",
+      "examples": 214,
+      "correct": 56,
+      "accuracy": 0.2616822429906542
+    },
+    {
+      "subject": "logical",
+      "examples": 123,
+      "correct": 24,
+      "accuracy": 0.1951219512195122
+    },
+    {
+      "subject": "machine_learning",
+      "examples": 122,
+      "correct": 23,
+      "accuracy": 0.1885245901639344
+    },
+    {
+      "subject": "management",
+      "examples": 210,
+      "correct": 52,
+      "accuracy": 0.24761904761904763
+    },
+    {
+      "subject": "marketing",
+      "examples": 180,
+      "correct": 45,
+      "accuracy": 0.25
+    },
+    {
+      "subject": "marxist_theory",
+      "examples": 189,
+      "correct": 47,
+      "accuracy": 0.24867724867724866
+    },
+    {
+      "subject": "modern_chinese",
+      "examples": 116,
+      "correct": 26,
+      "accuracy": 0.22413793103448276
+    },
+    {
+      "subject": "nutrition",
+      "examples": 145,
+      "correct": 33,
+      "accuracy": 0.22758620689655173
+    },
+    {
+      "subject": "philosophy",
+      "examples": 105,
+      "correct": 37,
+      "accuracy": 0.3523809523809524
+    },
+    {
+      "subject": "professional_accounting",
+      "examples": 175,
+      "correct": 46,
+      "accuracy": 0.26285714285714284
+    },
+    {
+      "subject": "professional_law",
+      "examples": 211,
+      "correct": 52,
+      "accuracy": 0.24644549763033174
+    },
+    {
+      "subject": "professional_medicine",
+      "examples": 376,
+      "correct": 87,
+      "accuracy": 0.23138297872340424
+    },
+    {
+      "subject": "professional_psychology",
+      "examples": 232,
+      "correct": 52,
+      "accuracy": 0.22413793103448276
+    },
+    {
+      "subject": "public_relations",
+      "examples": 174,
+      "correct": 46,
+      "accuracy": 0.26436781609195403
+    },
+    {
+      "subject": "security_study",
+      "examples": 135,
+      "correct": 32,
+      "accuracy": 0.23703703703703705
+    },
+    {
+      "subject": "sociology",
+      "examples": 226,
+      "correct": 57,
+      "accuracy": 0.252212389380531
+    },
+    {
+      "subject": "sports_science",
+      "examples": 165,
+      "correct": 39,
+      "accuracy": 0.23636363636363636
+    },
+    {
+      "subject": "traditional_chinese_medicine",
+      "examples": 185,
+      "correct": 44,
+      "accuracy": 0.23783783783783785
+    },
+    {
+      "subject": "virology",
+      "examples": 169,
+      "correct": 44,
+      "accuracy": 0.2603550295857988
+    },
+    {
+      "subject": "world_history",
+      "examples": 161,
+      "correct": 42,
+      "accuracy": 0.2608695652173913
+    },
+    {
+      "subject": "world_religions",
+      "examples": 160,
+      "correct": 43,
+      "accuracy": 0.26875
+    }
+  ],
+  "categories": [
+    {
+      "category": "agronomy",
+      "examples": 169,
+      "correct": 50,
+      "accuracy": 0.2958579881656805
+    },
+    {
+      "category": "anatomy",
+      "examples": 148,
+      "correct": 40,
+      "accuracy": 0.2702702702702703
+    },
+    {
+      "category": "ancient_chinese",
+      "examples": 164,
+      "correct": 52,
+      "accuracy": 0.3170731707317073
+    },
+    {
+      "category": "arts",
+      "examples": 160,
+      "correct": 40,
+      "accuracy": 0.25
+    },
+    {
+      "category": "astronomy",
+      "examples": 165,
+      "correct": 42,
+      "accuracy": 0.2545454545454545
+    },
+    {
+      "category": "business_ethics",
+      "examples": 209,
+      "correct": 55,
+      "accuracy": 0.2631578947368421
+    },
+    {
+      "category": "chinese_civil_service_exam",
+      "examples": 160,
+      "correct": 43,
+      "accuracy": 0.26875
+    },
+    {
+      "category": "chinese_driving_rule",
+      "examples": 131,
+      "correct": 33,
+      "accuracy": 0.25190839694656486
+    },
+    {
+      "category": "chinese_food_culture",
+      "examples": 136,
+      "correct": 34,
+      "accuracy": 0.25
+    },
+    {
+      "category": "chinese_foreign_policy",
+      "examples": 107,
+      "correct": 23,
+      "accuracy": 0.21495327102803738
+    },
+    {
+      "category": "chinese_history",
+      "examples": 323,
+      "correct": 78,
+      "accuracy": 0.24148606811145512
+    },
+    {
+      "category": "chinese_literature",
+      "examples": 204,
+      "correct": 52,
+      "accuracy": 0.2549019607843137
+    },
+    {
+      "category": "chinese_teacher_qualification",
+      "examples": 179,
+      "correct": 45,
+      "accuracy": 0.25139664804469275
+    },
+    {
+      "category": "clinical_knowledge",
+      "examples": 237,
+      "correct": 57,
+      "accuracy": 0.24050632911392406
+    },
+    {
+      "category": "college_actuarial_science",
+      "examples": 106,
+      "correct": 21,
+      "accuracy": 0.19811320754716982
+    },
+    {
+      "category": "college_education",
+      "examples": 107,
+      "correct": 23,
+      "accuracy": 0.21495327102803738
+    },
+    {
+      "category": "college_engineering_hydrology",
+      "examples": 106,
+      "correct": 31,
+      "accuracy": 0.29245283018867924
+    },
+    {
+      "category": "college_law",
+      "examples": 108,
+      "correct": 32,
+      "accuracy": 0.2962962962962963
+    },
+    {
+      "category": "college_mathematics",
+      "examples": 105,
+      "correct": 22,
+      "accuracy": 0.20952380952380953
+    },
+    {
+      "category": "college_medical_statistics",
+      "examples": 106,
+      "correct": 21,
+      "accuracy": 0.19811320754716982
+    },
+    {
+      "category": "college_medicine",
+      "examples": 273,
+      "correct": 69,
+      "accuracy": 0.25274725274725274
+    },
+    {
+      "category": "computer_science",
+      "examples": 204,
+      "correct": 39,
+      "accuracy": 0.19117647058823528
+    },
+    {
+      "category": "computer_security",
+      "examples": 171,
+      "correct": 46,
+      "accuracy": 0.26900584795321636
+    },
+    {
+      "category": "conceptual_physics",
+      "examples": 147,
+      "correct": 33,
+      "accuracy": 0.22448979591836735
+    },
+    {
+      "category": "construction_project_management",
+      "examples": 139,
+      "correct": 29,
+      "accuracy": 0.20863309352517986
+    },
+    {
+      "category": "economics",
+      "examples": 159,
+      "correct": 35,
+      "accuracy": 0.22012578616352202
+    },
+    {
+      "category": "education",
+      "examples": 163,
+      "correct": 46,
+      "accuracy": 0.2822085889570552
+    },
+    {
+      "category": "electrical_engineering",
+      "examples": 172,
+      "correct": 40,
+      "accuracy": 0.23255813953488372
+    },
+    {
+      "category": "elementary_chinese",
+      "examples": 252,
+      "correct": 59,
+      "accuracy": 0.23412698412698413
+    },
+    {
+      "category": "elementary_commonsense",
+      "examples": 198,
+      "correct": 50,
+      "accuracy": 0.25252525252525254
+    },
+    {
+      "category": "elementary_information_and_technology",
+      "examples": 238,
+      "correct": 67,
+      "accuracy": 0.2815126050420168
+    },
+    {
+      "category": "elementary_mathematics",
+      "examples": 230,
+      "correct": 43,
+      "accuracy": 0.18695652173913044
+    },
+    {
+      "category": "ethnology",
+      "examples": 135,
+      "correct": 32,
+      "accuracy": 0.23703703703703705
+    },
+    {
+      "category": "food_science",
+      "examples": 143,
+      "correct": 29,
+      "accuracy": 0.20279720279720279
+    },
+    {
+      "category": "genetics",
+      "examples": 176,
+      "correct": 43,
+      "accuracy": 0.24431818181818182
+    },
+    {
+      "category": "global_facts",
+      "examples": 149,
+      "correct": 35,
+      "accuracy": 0.2348993288590604
+    },
+    {
+      "category": "high_school_biology",
+      "examples": 169,
+      "correct": 48,
+      "accuracy": 0.28402366863905326
+    },
+    {
+      "category": "high_school_chemistry",
+      "examples": 132,
+      "correct": 39,
+      "accuracy": 0.29545454545454547
+    },
+    {
+      "category": "high_school_geography",
+      "examples": 118,
+      "correct": 26,
+      "accuracy": 0.22033898305084745
+    },
+    {
+      "category": "high_school_mathematics",
+      "examples": 164,
+      "correct": 42,
+      "accuracy": 0.25609756097560976
+    },
+    {
+      "category": "high_school_physics",
+      "examples": 110,
+      "correct": 31,
+      "accuracy": 0.2818181818181818
+    },
+    {
+      "category": "high_school_politics",
+      "examples": 143,
+      "correct": 37,
+      "accuracy": 0.25874125874125875
+    },
+    {
+      "category": "human_sexuality",
+      "examples": 126,
+      "correct": 33,
+      "accuracy": 0.2619047619047619
+    },
+    {
+      "category": "international_law",
+      "examples": 185,
+      "correct": 45,
+      "accuracy": 0.24324324324324326
+    },
+    {
+      "category": "journalism",
+      "examples": 172,
+      "correct": 41,
+      "accuracy": 0.23837209302325582
+    },
+    {
+      "category": "jurisprudence",
+      "examples": 411,
+      "correct": 102,
+      "accuracy": 0.24817518248175183
+    },
+    {
+      "category": "legal_and_moral_basis",
+      "examples": 214,
+      "correct": 56,
+      "accuracy": 0.2616822429906542
+    },
+    {
+      "category": "logical",
+      "examples": 123,
+      "correct": 24,
+      "accuracy": 0.1951219512195122
+    },
+    {
+      "category": "machine_learning",
+      "examples": 122,
+      "correct": 23,
+      "accuracy": 0.1885245901639344
+    },
+    {
+      "category": "management",
+      "examples": 210,
+      "correct": 52,
+      "accuracy": 0.24761904761904763
+    },
+    {
+      "category": "marketing",
+      "examples": 180,
+      "correct": 45,
+      "accuracy": 0.25
+    },
+    {
+      "category": "marxist_theory",
+      "examples": 189,
+      "correct": 47,
+      "accuracy": 0.24867724867724866
+    },
+    {
+      "category": "modern_chinese",
+      "examples": 116,
+      "correct": 26,
+      "accuracy": 0.22413793103448276
+    },
+    {
+      "category": "nutrition",
+      "examples": 145,
+      "correct": 33,
+      "accuracy": 0.22758620689655173
+    },
+    {
+      "category": "philosophy",
+      "examples": 105,
+      "correct": 37,
+      "accuracy": 0.3523809523809524
+    },
+    {
+      "category": "professional_accounting",
+      "examples": 175,
+      "correct": 46,
+      "accuracy": 0.26285714285714284
+    },
+    {
+      "category": "professional_law",
+      "examples": 211,
+      "correct": 52,
+      "accuracy": 0.24644549763033174
+    },
+    {
+      "category": "professional_medicine",
+      "examples": 376,
+      "correct": 87,
+      "accuracy": 0.23138297872340424
+    },
+    {
+      "category": "professional_psychology",
+      "examples": 232,
+      "correct": 52,
+      "accuracy": 0.22413793103448276
+    },
+    {
+      "category": "public_relations",
+      "examples": 174,
+      "correct": 46,
+      "accuracy": 0.26436781609195403
+    },
+    {
+      "category": "security_study",
+      "examples": 135,
+      "correct": 32,
+      "accuracy": 0.23703703703703705
+    },
+    {
+      "category": "sociology",
+      "examples": 226,
+      "correct": 57,
+      "accuracy": 0.252212389380531
+    },
+    {
+      "category": "sports_science",
+      "examples": 165,
+      "correct": 39,
+      "accuracy": 0.23636363636363636
+    },
+    {
+      "category": "traditional_chinese_medicine",
+      "examples": 185,
+      "correct": 44,
+      "accuracy": 0.23783783783783785
+    },
+    {
+      "category": "virology",
+      "examples": 169,
+      "correct": 44,
+      "accuracy": 0.2603550295857988
+    },
+    {
+      "category": "world_history",
+      "examples": 161,
+      "correct": 42,
+      "accuracy": 0.2608695652173913
+    },
+    {
+      "category": "world_religions",
+      "examples": 160,
+      "correct": 43,
+      "accuracy": 0.26875
+    }
+  ],
+  "elapsed_sec": 213.19897394627333,
+  "examples_per_sec": 54.32483930677215
+}

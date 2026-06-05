@@ -1,0 +1,35 @@
+{
+  "model": "data/tokenizer/zh_bpe_20k.model",
+  "vocab_size": 20000,
+  "special_token_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3,
+    "<|endoftext|>": 4,
+    "<|system|>": 5,
+    "<|user|>": 6,
+    "<|assistant|>": 7
+  },
+  "piece_length_distribution": {
+    "single": 8474,
+    "double": 8593,
+    "multi": 2668,
+    "special_or_meta": 265
+  },
+  "piece_length_ratio": {
+    "single": 0.4237,
+    "double": 0.4296,
+    "multi": 0.1334,
+    "special_or_meta": 0.0132
+  },
+  "tokens_per_char": 0.683,
+  "chars_per_token": 1.4641,
+  "unk_rate": 0.0,
+  "unk_count": 0,
+  "roundtrip_rate": 0.9975,
+  "analyze_sample": {
+    "chars": 8187736,
+    "tokens": 5592458
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "internal_validation": {
+    "name": "internal_validation",
+    "token_file": "data/processed/pretrain_val_tokens.bin",
+    "block_size": 1024,
+    "batch_size": 16,
+    "requested_batches": null,
+    "batches": 2453,
+    "tokens": 40186880,
+    "nll": 148124368.0,
+    "loss": 3.6858887278634223,
+    "ppl": 39.88054966064693,
+    "token_acc": 0.34638255072302204,
+    "elapsed_sec": 142.5590409487486,
+    "tokens_per_sec": 281896.3969773589
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "model": "/root/tl/chinese-llm-from-scratch/results/verify_pipeline_debug/verify_bpe.model",
+  "vocab_size": 1024,
+  "special_token_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3,
+    "<|endoftext|>": 4,
+    "<|system|>": 5,
+    "<|user|>": 6,
+    "<|assistant|>": 7
+  },
+  "piece_length_distribution": {
+    "single": 300,
+    "double": 380,
+    "multi": 79,
+    "special_or_meta": 265
+  },
+  "piece_length_ratio": {
+    "single": 0.293,
+    "double": 0.3711,
+    "multi": 0.0771,
+    "special_or_meta": 0.2588
+  },
+  "tokens_per_char": 0.499,
+  "chars_per_token": 2.0039,
+  "unk_rate": 0.0,
+  "unk_count": 0,
+  "roundtrip_rate": 1.0,
+  "analyze_sample": {
+    "chars": 181814,
+    "tokens": 90728
+  }
+}

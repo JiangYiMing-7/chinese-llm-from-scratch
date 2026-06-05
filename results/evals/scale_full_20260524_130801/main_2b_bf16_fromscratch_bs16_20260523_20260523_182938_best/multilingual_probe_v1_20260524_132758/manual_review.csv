@@ -1,0 +1,10 @@
+id,suite,category,profile,prompt,completion,fluency_1_5,relevance_1_5,coherence_1_5,factual_or_logic_issue,repetition_issue,overall_1_5,notes
+multi_en_001,multilingual_probe,english_completion,greedy,"Natural language processing models can learn patterns from text data, but small models often",can be sed to be sed to be sed to be sed to be sed to be sed to be sed to be sed to be sed to be sed to be sed to be sed to be sed to be sed to be sed to be s,,,,,,,
+multi_mix_001,multilingual_probe,mixed_language,greedy,在训练脚本中，learning rate scheduler 的作用是,": 定义一个脚本,并定义脚本中的脚本。 定义脚本脚本,并定义脚本中的脚本。 定义脚本脚本,并定义脚本中的脚本。 定义脚本脚本,并定义脚本中的脚本。 定义脚本",,,,,,,
+multi_translate_001,multilingual_probe,translation,greedy,"用户：请把“data quality is important for model training”翻译成中文。
+助手：",请把“data quality is important for model training”翻译成中文。 用户:请把“data quality is important for model training”翻译成中文。 用户:请把“data ,,,,,,,
+multi_code_001,multilingual_probe,code_mixed,greedy,"下面的 Python 函数用于计算列表总和：
+def sum_list(xs):
+    total = 0
+    for x in xs:
+        ",total = 0 for xs: total = 0 for xs: total = 0 for xs: total = 0 for xs: total = 0 for xs: total = 0 for xs: total = 0 for xs: t,,,,,,,

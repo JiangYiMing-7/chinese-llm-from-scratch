@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from pathlib import Path
 import json
 import math
@@ -377,6 +378,46 @@ def _check_training_config(model_cfg: ModelConfig, data_cfg: dict) -> None:
         raise ValueError("data.train_path and data.val_path must be different files")
 
 
+def _resolve_precision(train_cfg: dict, device: torch.device) -> tuple[str, dict]:
+    precision = str(train_cfg.get("precision", "fp32")).lower()
+    if precision not in {"fp32", "bf16"}:
+        raise ValueError(
+            f"unsupported train.precision: {precision}; expected fp32 or bf16"
+        )
+
+    runtime = {
+        "precision": precision,
+        "autocast_enabled": precision == "bf16",
+        "autocast_dtype": "bfloat16" if precision == "bf16" else None,
+        "cuda_bf16_supported": None,
+        "cuda_matmul_allow_tf32": None,
+        "cudnn_allow_tf32": None,
+    }
+    if device.type == "cuda":
+        runtime.update({
+            "cuda_bf16_supported": bool(torch.cuda.is_bf16_supported()),
+            "cuda_matmul_allow_tf32": bool(torch.backends.cuda.matmul.allow_tf32),
+            "cudnn_allow_tf32": bool(torch.backends.cudnn.allow_tf32),
+        })
+
+    if precision == "bf16":
+        if device.type != "cuda":
+            raise ValueError("train.precision=bf16 requires a CUDA device")
+        if not runtime["cuda_bf16_supported"]:
+            raise RuntimeError("train.precision=bf16 requires CUDA BF16 support")
+
+    train_cfg["precision"] = precision
+    return precision, runtime
+
+
+def _autocast_context(precision: str, device: torch.device):
+    if precision == "bf16":
+        if device.type != "cuda":
+            raise ValueError("train.precision=bf16 requires a CUDA device")
+        return torch.autocast(device_type="cuda", dtype=torch.bfloat16)
+    return nullcontext()
+
+
 def _grad_norm(parameters) -> float:
     norms = [
         p.grad.detach().float().norm(2)
@@ -395,10 +436,12 @@ def _token_accuracy(logits: torch.Tensor, labels: torch.Tensor) -> float:
     return correct / max(1, total)
 
 
-def train_one_step(model, batch, optimizer, train_cfg) -> dict:
+def train_one_step(model, batch, optimizer, train_cfg, precision: str | None = None) -> dict:
     input_ids = batch[:, :-1]
     labels = batch[:, 1:]
-    output = model(input_ids, labels=labels)
+    precision = precision or str(train_cfg.get("precision", "fp32")).lower()
+    with _autocast_context(precision, batch.device):
+        output = model(input_ids, labels=labels)
     loss_value = float(output.loss.detach().cpu())
     token_acc = None
     if train_cfg.get("track_token_acc", True):
@@ -430,7 +473,8 @@ def train_one_step(model, batch, optimizer, train_cfg) -> dict:
 
 
 @torch.no_grad()
-def validate(model, dataloader, max_batches: int, device=None) -> dict:
+def validate(model, dataloader, max_batches: int, device=None,
+             precision: str = "fp32") -> dict:
     model.eval()
     total_loss = 0.0
     total_correct = 0
@@ -442,7 +486,8 @@ def validate(model, dataloader, max_batches: int, device=None) -> dict:
         if device is not None:
             batch = batch.to(device)
         labels = batch[:, 1:]
-        output = model(batch[:, :-1], labels=labels)
+        with _autocast_context(precision, batch.device):
+            output = model(batch[:, :-1], labels=labels)
         tokens = labels.numel()
         total_loss += float(output.loss.detach().cpu()) * tokens
         total_correct += (output.logits.argmax(dim=-1) == labels).sum().item()
@@ -466,6 +511,7 @@ def pretrain(config_path: str) -> None:
     data_cfg = cfg["data"]
     seed_everything(train_cfg.get("seed", 1337))
     device = _device(train_cfg.get("device", "auto"))
+    precision, precision_runtime = _resolve_precision(train_cfg, device)
 
     model_cfg = ModelConfig(**cfg["model"])
     _check_training_config(model_cfg, data_cfg)
@@ -540,6 +586,15 @@ def pretrain(config_path: str) -> None:
     logger.info("model params: %.2f M", param_count / 1e6)
     logger.info("train samples=%d val samples=%d device=%s",
                 len(train_dataset), len(val_dataset), device)
+    logger.info(
+        "precision=%s autocast=%s cuda_bf16_supported=%s "
+        "cuda_matmul_allow_tf32=%s cudnn_allow_tf32=%s",
+        precision,
+        precision_runtime["autocast_enabled"],
+        precision_runtime["cuda_bf16_supported"],
+        precision_runtime["cuda_matmul_allow_tf32"],
+        precision_runtime["cudnn_allow_tf32"],
+    )
     logger.info("run_dir=%s", run_dir)
 
     step = start_step
@@ -564,6 +619,8 @@ def pretrain(config_path: str) -> None:
         "latest_checkpoint": str(latest_checkpoint),
         "best_checkpoint": str(best_checkpoint),
         "device": str(device),
+        "precision": precision,
+        "precision_runtime": precision_runtime,
         "model_params": param_count,
         "train_samples": len(train_dataset),
         "val_samples": len(val_dataset),
@@ -581,6 +638,7 @@ def pretrain(config_path: str) -> None:
         "run_dir": str(run_dir),
         "config_path": config_path,
         "device": str(device),
+        **precision_runtime,
         "model_params": param_count,
         "train_samples": len(train_dataset),
         "val_samples": len(val_dataset),
@@ -615,7 +673,9 @@ def pretrain(config_path: str) -> None:
                     group["lr"] = lr
                 batch = batch.to(device)
                 step_start = time.perf_counter()
-                metrics = train_one_step(model, batch, optimizer, train_cfg)
+                metrics = train_one_step(
+                    model, batch, optimizer, train_cfg, precision=precision
+                )
                 step_time = time.perf_counter() - step_start
                 step += 1
                 tokens_seen += metrics["tokens"]
@@ -659,7 +719,8 @@ def pretrain(config_path: str) -> None:
                     )
                 if step % train_cfg["eval_interval"] == 0:
                     val_metrics = validate(
-                        model, val_loader, train_cfg["eval_batches"], device
+                        model, val_loader, train_cfg["eval_batches"], device,
+                        precision=precision,
                     )
                     val_metrics.update({
                         "run_id": run_id,
@@ -724,6 +785,7 @@ def pretrain(config_path: str) -> None:
             "ended_at": ended_at,
             "step": step,
             "tokens_seen": tokens_seen,
+            "precision": precision,
             "elapsed_sec": time.time() - start_time,
             "best_val_loss": best_val_loss,
             "latest_checkpoint": str(latest_checkpoint),
@@ -742,6 +804,7 @@ def pretrain(config_path: str) -> None:
             "ended_at": _now_iso(),
             "step": step,
             "tokens_seen": tokens_seen,
+            "precision": precision,
             "elapsed_sec": time.time() - start_time,
             "best_val_loss": best_val_loss,
             "latest_checkpoint": str(latest_checkpoint),

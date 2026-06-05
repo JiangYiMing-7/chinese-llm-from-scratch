@@ -1,0 +1,47 @@
+{
+  "input": "data/raw/pilot_raw.jsonl",
+  "output": "data/processed/pilot_clean.jsonl",
+  "elapsed_seconds": 1041.6,
+  "params": {
+    "min_len": 50,
+    "max_len": 100000,
+    "lang_threshold": 0.5,
+    "punct_ratio": 0.3,
+    "digit_ratio": 0.4,
+    "repeat_ratio": 0.3,
+    "dedup_threshold": 0.85,
+    "num_perm": 128,
+    "dedup_backend": "redis",
+    "redis_prefix": "clean_pilot_main20k"
+  },
+  "counts": {
+    "total": 80000,
+    "drop_empty": 0,
+    "drop_length": 2,
+    "drop_language": 3810,
+    "drop_punct": 19,
+    "drop_digit": 14,
+    "drop_repeat": 6,
+    "drop_exact_dup": 1,
+    "drop_dedup": 114,
+    "kept": 76034
+  },
+  "ratios": {
+    "drop_empty": 0.0,
+    "drop_length": 0.0,
+    "drop_language": 0.0476,
+    "drop_punct": 0.0002,
+    "drop_digit": 0.0002,
+    "drop_repeat": 0.0001,
+    "drop_exact_dup": 0.0,
+    "drop_dedup": 0.0014,
+    "kept": 0.9504
+  },
+  "corpus": {
+    "kept_chars": 173583539,
+    "avg_doc_len": 2283.0,
+    "min_doc_len": 89,
+    "max_doc_len": 92667,
+    "estimated_tokens": 138866831
+  }
+}

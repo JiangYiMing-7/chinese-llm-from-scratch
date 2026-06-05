@@ -1,0 +1,5 @@
+auto_pass,category,cjk_ratio,completion_tokens,duplicate_4gram_ratio,generation_tokens_per_sec,id,max_char_run,profile,suite
+,english_completion,0.0,64,0.7604166666666666,130.72876766687097,multi_en_001,2,greedy,multilingual_probe
+,mixed_language,0.0,64,0.926829268292683,645.9265947336579,multi_mix_001,1,greedy,multilingual_probe
+False,translation,0.1728395061728395,64,0.7307692307692308,672.1825646096394,multi_translate_001,1,greedy,multilingual_probe
+,code_mixed,0.0,64,0.9655172413793104,662.7255867374562,multi_code_001,1,greedy,multilingual_probe

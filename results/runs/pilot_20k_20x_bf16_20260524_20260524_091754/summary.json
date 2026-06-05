@@ -1,0 +1,16 @@
+{
+  "run_id": "pilot_20k_20x_bf16_20260524_20260524_091754",
+  "run_dir": "results/runs/pilot_20k_20x_bf16_20260524_20260524_091754",
+  "status": "completed",
+  "started_at": "2026-05-24T09:17:54+0800",
+  "ended_at": "2026-05-24T10:27:37+0800",
+  "step": 45791,
+  "tokens_seen": 750239744,
+  "precision": "bf16",
+  "elapsed_sec": 4181.960351467133,
+  "best_val_loss": 3.836675863265991,
+  "latest_checkpoint": "results/runs/pilot_20k_20x_bf16_20260524_20260524_091754/checkpoints/ckpt.pt",
+  "best_checkpoint": "results/runs/pilot_20k_20x_bf16_20260524_20260524_091754/checkpoints/best.pt",
+  "metrics_path": "results/runs/pilot_20k_20x_bf16_20260524_20260524_091754/metrics.jsonl",
+  "config_snapshot_path": "results/runs/pilot_20k_20x_bf16_20260524_20260524_091754/config.yaml"
+}

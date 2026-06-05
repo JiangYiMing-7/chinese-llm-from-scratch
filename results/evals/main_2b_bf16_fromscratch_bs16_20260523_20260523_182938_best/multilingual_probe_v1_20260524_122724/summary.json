@@ -1,0 +1,53 @@
+{
+  "generations": 4,
+  "groups": [
+    {
+      "suite": "multilingual_probe",
+      "category": "code_mixed",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 0,
+      "auto_pass_rate": null,
+      "mean_cjk_ratio": 0.0,
+      "mean_duplicate_4gram_ratio": 0.8539325842696629,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 238.04912825482182
+    },
+    {
+      "suite": "multilingual_probe",
+      "category": "english_completion",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 0,
+      "auto_pass_rate": null,
+      "mean_cjk_ratio": 0.0,
+      "mean_duplicate_4gram_ratio": 0.9074074074074074,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 90.08665258310013
+    },
+    {
+      "suite": "multilingual_probe",
+      "category": "mixed_language",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 0,
+      "auto_pass_rate": null,
+      "mean_cjk_ratio": 0.8767123287671232,
+      "mean_duplicate_4gram_ratio": 0.7,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 229.55579845125354
+    },
+    {
+      "suite": "multilingual_probe",
+      "category": "translation",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.1834862385321101,
+      "mean_duplicate_4gram_ratio": 0.5188679245283019,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 234.20668508811244
+    }
+  ]
+}

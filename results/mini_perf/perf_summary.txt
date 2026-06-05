@@ -1,0 +1,24 @@
+Mini tokenizer/data performance summary
+- 01_download_debug_wiki: elapsed=0:22.90, cpu=10%, max_rss_kb=868432
+- 03_clean: elapsed=0:13.01, cpu=103%, max_rss_kb=161396
+- 04_train_tokenizer_2k: elapsed=0:00.20, cpu=135%, max_rss_kb=38612
+- 04_train_tokenizer_8k: elapsed=0:08.58, cpu=100%, max_rss_kb=314120
+- 05_token_stats_8k: elapsed=0:00.71, cpu=99%, max_rss_kb=36044
+- 06_build_dataset_8k: elapsed=0:01.75, cpu=116%, max_rss_kb=649820
+
+results/mini_perf/clean_report.json
+counts= {'total': 300, 'drop_empty': 0, 'drop_length': 0, 'drop_language': 13, 'drop_punct': 0, 'drop_digit': 0, 'drop_repeat': 0, 'drop_exact_dup': 0, 'drop_dedup': 0, 'kept': 287}
+corpus= {'kept_chars': 2582194, 'avg_doc_len': 8997.2, 'min_doc_len': 98, 'max_doc_len': 50948, 'estimated_tokens': 2065755}
+
+data/tokenizer/zh_bpe_8k_mini_stats.json
+vocab_size= 8000 tokens_per_char= 0.8051 unk_rate= 0.0 roundtrip_rate= 1.0
+
+results/mini_perf/token_stats_8k.json
+total= {'documents': 287, 'chars': 2582194, 'tokens': 2033337, 'tokens_per_char': 0.787445, 'avg_doc_chars': 8997.2, 'avg_doc_tokens': 7084.8, 'token_ratio': 1.0, 'char_ratio': 1.0}
+
+Artifacts:
+- data/processed/mini_perf_clean.jsonl: 6851910 bytes
+- data/tokenizer/zh_bpe_8k_mini.model: 341597 bytes
+- data/processed/mini_perf_tokens.pt: 3865725 bytes
+- data/processed/mini_perf_val_tokens.pt: 205273 bytes
+- results/mini_perf/perf_summary.txt: 0 bytes

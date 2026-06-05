@@ -1,0 +1,29 @@
+{
+  "generations": 5,
+  "groups": [
+    {
+      "suite": "generation",
+      "category": "expository",
+      "profile": "greedy",
+      "examples": 2,
+      "auto_scored": 0,
+      "auto_pass_rate": null,
+      "mean_cjk_ratio": 0.9589703541284955,
+      "mean_duplicate_4gram_ratio": 0.8968451124083965,
+      "mean_completion_tokens": 128,
+      "mean_tokens_per_sec": 677.198618196746
+    },
+    {
+      "suite": "generation",
+      "category": "narrative",
+      "profile": "greedy",
+      "examples": 3,
+      "auto_scored": 0,
+      "auto_pass_rate": null,
+      "mean_cjk_ratio": 0.8173975674219934,
+      "mean_duplicate_4gram_ratio": 0.8679009568248414,
+      "mean_completion_tokens": 128,
+      "mean_tokens_per_sec": 507.5209476636795
+    }
+  ]
+}

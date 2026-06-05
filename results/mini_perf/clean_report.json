@@ -1,0 +1,47 @@
+{
+  "input": "data/raw/mini_perf_raw.jsonl",
+  "output": "data/processed/mini_perf_clean.jsonl",
+  "elapsed_seconds": 12.5,
+  "params": {
+    "min_len": 50,
+    "max_len": 100000,
+    "lang_threshold": 0.5,
+    "punct_ratio": 0.3,
+    "digit_ratio": 0.4,
+    "repeat_ratio": 0.3,
+    "dedup_threshold": 0.85,
+    "num_perm": 128,
+    "dedup_backend": "memory",
+    "redis_prefix": null
+  },
+  "counts": {
+    "total": 300,
+    "drop_empty": 0,
+    "drop_length": 0,
+    "drop_language": 13,
+    "drop_punct": 0,
+    "drop_digit": 0,
+    "drop_repeat": 0,
+    "drop_exact_dup": 0,
+    "drop_dedup": 0,
+    "kept": 287
+  },
+  "ratios": {
+    "drop_empty": 0.0,
+    "drop_length": 0.0,
+    "drop_language": 0.0433,
+    "drop_punct": 0.0,
+    "drop_digit": 0.0,
+    "drop_repeat": 0.0,
+    "drop_exact_dup": 0.0,
+    "drop_dedup": 0.0,
+    "kept": 0.9567
+  },
+  "corpus": {
+    "kept_chars": 2582194,
+    "avg_doc_len": 8997.2,
+    "min_doc_len": 98,
+    "max_doc_len": 50948,
+    "estimated_tokens": 2065755
+  }
+}

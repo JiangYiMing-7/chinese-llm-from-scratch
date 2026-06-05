@@ -1,0 +1,10 @@
+{
+  "token_ids_bin": "/root/tl/chinese-llm-from-scratch/results/verify_pipeline_debug/pretrain_tokens.bin",
+  "dtype": "int16",
+  "context_length": 32,
+  "num_documents": 600,
+  "total_tokens": 91328,
+  "tokenizer": "/root/tl/chinese-llm-from-scratch/results/verify_pipeline_debug/verify_bpe.model",
+  "vocab_size": 1024,
+  "split": "train"
+}

@@ -1,0 +1,137 @@
+{
+  "generations": 12,
+  "groups": [
+    {
+      "suite": "instruction_sanity",
+      "category": "arithmetic",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.8631578947368421,
+      "mean_duplicate_4gram_ratio": 0.8369565217391304,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 239.39836619961403
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "benign_instruction",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 1.0,
+      "mean_cjk_ratio": 0.9090909090909091,
+      "mean_duplicate_4gram_ratio": 0.6823529411764706,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 238.3277232576224
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "classification",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.6904761904761905,
+      "mean_duplicate_4gram_ratio": 0.5679012345679013,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 232.70407758147536
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "constraint",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.8554216867469879,
+      "mean_duplicate_4gram_ratio": 0.775,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 228.90347530617672
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "extraction",
+      "profile": "greedy",
+      "examples": 2,
+      "auto_scored": 2,
+      "auto_pass_rate": 0.5,
+      "mean_cjk_ratio": 0.7910661175932281,
+      "mean_duplicate_4gram_ratio": 0.45848595848595847,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 235.77764580682145
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "format",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.8095238095238095,
+      "mean_duplicate_4gram_ratio": 0.6790123456790124,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 236.05519990901774
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "json",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 1.0,
+      "mean_cjk_ratio": 0.7448979591836735,
+      "mean_duplicate_4gram_ratio": 0.6526315789473685,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 237.026215878554
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "rewriting",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.8488372093023255,
+      "mean_duplicate_4gram_ratio": 0.6144578313253012,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 238.02873552436895
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "short_answer",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.8586956521739131,
+      "mean_duplicate_4gram_ratio": 0.7191011235955056,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 94.9136132944378
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "summary",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.8958333333333334,
+      "mean_duplicate_4gram_ratio": 0.4946236559139785,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 236.92855595303527
+    },
+    {
+      "suite": "instruction_sanity",
+      "category": "translation",
+      "profile": "greedy",
+      "examples": 1,
+      "auto_scored": 1,
+      "auto_pass_rate": 0.0,
+      "mean_cjk_ratio": 0.1864406779661017,
+      "mean_duplicate_4gram_ratio": 0.4608695652173913,
+      "mean_completion_tokens": 64,
+      "mean_tokens_per_sec": 234.00967002607723
+    }
+  ]
+}

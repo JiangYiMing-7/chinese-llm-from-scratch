@@ -1,0 +1,15 @@
+{
+  "run_id": "main_20260523_005535",
+  "run_dir": "results/runs/main_20260523_005535",
+  "status": "completed",
+  "started_at": "2026-05-23T00:55:35+0800",
+  "ended_at": "2026-05-23T04:36:20+0800",
+  "step": 30500,
+  "tokens_seen": 499712000,
+  "elapsed_sec": 13243.077651262283,
+  "best_val_loss": 3.6736500549316404,
+  "latest_checkpoint": "results/runs/main_20260523_005535/checkpoints/ckpt.pt",
+  "best_checkpoint": "results/runs/main_20260523_005535/checkpoints/best.pt",
+  "metrics_path": "results/runs/main_20260523_005535/metrics.jsonl",
+  "config_snapshot_path": "results/runs/main_20260523_005535/config.yaml"
+}

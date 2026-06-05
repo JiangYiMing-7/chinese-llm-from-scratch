@@ -1,0 +1,45 @@
+run_id=20260524_133418
+purpose=Main 0.5B-token vs Main 2B-token full-context evaluation
+created_at=2026-05-24T13:34:18+08:00
+cwd=/root/autodl-tmp/chinese-llm-from-scratch
+device=cuda
+dtype=bfloat16
+validation_block_size=1024
+tokenizer=data/tokenizer/zh_bpe_20k.model
+validation_bin=data/processed/pretrain_val_tokens.bin
+ceval_dir=data/eval/ceval-exam
+cmmlu_dir=data/eval/CMMLU/data
+
+[git]
+4ac21f5c69e22181b3a1ab563681e3a4199417ba
+ M data/scripts/train_tokenizer.py
+ M pretrain/dataset.py
+ M pretrain/pretrain.py
+?? configs/bf16_smoke_bs16_100steps_20260523.yaml
+?? configs/bf16_smoke_bs32_100steps_20260523.yaml
+?? configs/bf16_smoke_bs64_100steps_20260523.yaml
+?? configs/main_2b_bf16_fromscratch_bs16_20260523.yaml
+?? configs/pilot_20k_20x_bf16_20260524.yaml
+?? configs/pilot_20k_20x_bf16_smoke_20260524.yaml
+?? configs/tiny_20k_20x_bf16_20260524.yaml
+?? configs/tiny_20k_20x_bf16_smoke_20260524.yaml
+?? data/eval/
+?? data/tokenizer/probe_spm_1m.txt
+?? data/tokenizer/probe_spm_200k.txt
+?? data/tokenizer/spm_train_10m.txt
+?? data/tokenizer/spm_train_1m.txt
+?? data/tokenizer/spm_train_2m.txt
+?? eval/
+?? logs/
+?? pretrain/pretrain.py.fp32_before_bf16_20260523_1819.py
+?? results/evals/
+?? results/exact_dedup_smoke/
+?? results/main20k/
+?? results/mini_perf/
+?? results/verify_pipeline_debug/
+?? scripts/
+?? test_eval_suite.py
+?? tests/test_eval_suite.py
+
+[data_hash_files]
+eval_data_sha256_20260524_121000.txt

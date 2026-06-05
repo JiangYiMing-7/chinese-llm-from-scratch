@@ -1,0 +1,16 @@
+{
+  "run_id": "bf16_smoke_bs32_100steps_20260523_20260523_182648",
+  "run_dir": "results/runs/bf16_smoke_bs32_100steps_20260523_20260523_182648",
+  "status": "completed",
+  "started_at": "2026-05-23T18:26:48+0800",
+  "ended_at": "2026-05-23T18:27:55+0800",
+  "step": 100,
+  "tokens_seen": 3276800,
+  "precision": "bf16",
+  "elapsed_sec": 65.08399438858032,
+  "best_val_loss": 7.908312225341797,
+  "latest_checkpoint": "results/runs/bf16_smoke_bs32_100steps_20260523_20260523_182648/checkpoints/ckpt.pt",
+  "best_checkpoint": "results/runs/bf16_smoke_bs32_100steps_20260523_20260523_182648/checkpoints/best.pt",
+  "metrics_path": "results/runs/bf16_smoke_bs32_100steps_20260523_20260523_182648/metrics.jsonl",
+  "config_snapshot_path": "results/runs/bf16_smoke_bs32_100steps_20260523_20260523_182648/config.yaml"
+}

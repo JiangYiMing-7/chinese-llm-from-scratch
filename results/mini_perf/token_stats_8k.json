@@ -1,0 +1,27 @@
+{
+  "input": "data/processed/mini_perf_clean.jsonl",
+  "tokenizer": "data/tokenizer/zh_bpe_8k_mini.model",
+  "elapsed_seconds": 0.7,
+  "total": {
+    "documents": 287,
+    "chars": 2582194,
+    "tokens": 2033337,
+    "tokens_per_char": 0.787445,
+    "avg_doc_chars": 8997.2,
+    "avg_doc_tokens": 7084.8,
+    "token_ratio": 1.0,
+    "char_ratio": 1.0
+  },
+  "by_source": {
+    "unknown": {
+      "documents": 287,
+      "chars": 2582194,
+      "tokens": 2033337,
+      "tokens_per_char": 0.787445,
+      "avg_doc_chars": 8997.2,
+      "avg_doc_tokens": 7084.8,
+      "token_ratio": 1.0,
+      "char_ratio": 1.0
+    }
+  }
+}

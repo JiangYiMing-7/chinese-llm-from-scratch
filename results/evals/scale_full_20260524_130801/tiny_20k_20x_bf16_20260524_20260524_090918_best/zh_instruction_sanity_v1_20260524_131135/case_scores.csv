@@ -1,0 +1,13 @@
+auto_pass,category,cjk_ratio,completion_tokens,duplicate_4gram_ratio,generation_tokens_per_sec,id,max_char_run,profile,suite
+False,short_answer,0.25,64,0.8688524590163934,134.3344551961741,inst_short_001,1,greedy,instruction_sanity
+False,classification,0.6666666666666666,64,0.95,630.1402670270891,inst_classify_001,1,greedy,instruction_sanity
+False,extraction,0.671875,64,0.9016393442622951,652.3525770771546,inst_extract_001,1,greedy,instruction_sanity
+False,json,0.2972972972972973,64,0.9014084507042254,643.7553655525979,inst_json_001,1,greedy,instruction_sanity
+False,format,0.6666666666666666,64,0.95,643.6211157961316,inst_list_001,1,greedy,instruction_sanity
+True,rewriting,0.6666666666666666,64,0.95,660.48398905226,inst_rewrite_001,1,greedy,instruction_sanity
+False,translation,0.6666666666666666,64,0.95,659.6563319465087,inst_translate_001,1,greedy,instruction_sanity
+False,arithmetic,0.9333333333333333,64,0.5588235294117647,644.9164443571202,inst_math_001,1,greedy,instruction_sanity
+False,constraint,0.6666666666666666,64,0.8666666666666667,595.9144820132614,inst_constraint_001,1,greedy,instruction_sanity
+False,summary,0.6666666666666666,64,0.95,650.1853831157605,inst_summary_001,1,greedy,instruction_sanity
+False,extraction,0.6666666666666666,64,0.95,647.8580204189207,inst_keyword_001,1,greedy,instruction_sanity
+True,benign_instruction,0.6666666666666666,64,0.95,675.7378350874429,inst_safe_benign_001,1,greedy,instruction_sanity
