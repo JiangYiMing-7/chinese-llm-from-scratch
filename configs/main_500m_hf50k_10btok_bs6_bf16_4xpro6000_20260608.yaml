@@ -1,0 +1,47 @@
+model:
+  vocab_size: 50000
+  max_seq_len: 1024
+  n_layers: 24
+  n_heads: 20
+  d_model: 1280
+  head_dim: 64
+  ffn_hidden_dim: 3456
+  dropout: 0.0
+  rope_theta: 10000.0
+  norm_eps: 1.0e-5
+  tie_embeddings: true
+  bias: false
+
+data:
+  train_path: data/processed/cci3hq_500m/pretrain_hf50k_train.bin
+  val_path: data/processed/cci3hq_500m/pretrain_hf50k_val.bin
+  val_split: 0.0
+  tokenizer_path: data/tokenizer/zh_bpe_hf50k_cci3hq_seed20260608.json
+  block_size: 1024
+  num_workers: 2
+
+train:
+  batch_size: 6
+  max_steps: 406902
+  warmup_steps: 8138
+  lr: 2.0e-4
+  min_lr: 2.0e-5
+  weight_decay: 0.1
+  grad_clip: 1.0
+  log_interval: 10
+  metrics_interval: 1
+  run_dir_root: results/runs
+  run_name: main_500m_hf50k_10btok_bs6_bf16_4xpro6000_20260608
+  metrics_filename: metrics.jsonl
+  hardware_metrics_interval: 10
+  eval_interval: 1000
+  eval_batches: 100
+  save_interval: 5000
+  save_best: true
+  best_checkpoint_name: best.pt
+  resume_from: null
+  seed: 1337
+  device: auto
+  precision: bf16
+  track_token_acc: true
+  loss_ema_beta: 0.95

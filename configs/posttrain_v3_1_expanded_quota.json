@@ -1,0 +1,39 @@
+{
+  "name": "posttrain_v3_1_expanded_100k",
+  "notes": [
+    "Target 100k normal SFT train examples with emphasis on extraction and reading/search.",
+    "Use --scale-quota-json so the same proportions are scaled to validation size."
+  ],
+  "quotas": [
+    {
+      "source": "cluener2020",
+      "task_type": "entity_extraction",
+      "count": 8000
+    },
+    {
+      "source": "duie",
+      "task_type": "relation_extraction",
+      "count": 18000
+    },
+    {
+      "task_type": "information_extraction",
+      "count": 4000
+    },
+    {
+      "bucket": "reading",
+      "count": 26000
+    },
+    {
+      "bucket": "nlu",
+      "count": 14000
+    },
+    {
+      "bucket": "summary",
+      "count": 14000
+    },
+    {
+      "bucket": "instruction",
+      "count": 16000
+    }
+  ]
+}

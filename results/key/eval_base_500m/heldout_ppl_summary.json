@@ -1,0 +1,17 @@
+{
+  "internal_validation": {
+    "name": "internal_validation",
+    "token_file": "data/processed/cci3hq_500m/pretrain_hf50k_val.bin",
+    "block_size": 1024,
+    "batch_size": 16,
+    "requested_batches": null,
+    "batches": 3520,
+    "tokens": 57667584,
+    "nll": 181089536.0,
+    "loss": 3.1402310178279706,
+    "ppl": 23.109204880426958,
+    "token_acc": 0.43175507404645214,
+    "elapsed_sec": 745.6209919312969,
+    "tokens_per_sec": 77341.68515109834
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "output": "eval/data/zh_reference_tasks_500m_v2.jsonl",
+  "target_examples": 2000,
+  "examples": 2000,
+  "source_candidates": {
+    "lcsts": {
+      "rows": 8685,
+      "task_counts": {
+        "summarization": 8685
+      }
+    },
+    "cmrc2018": {
+      "rows": 6438,
+      "task_counts": {
+        "reading_qa": 3219,
+        "search_info": 3219
+      }
+    },
+    "cluener2020": {
+      "rows": 1343,
+      "task_counts": {
+        "entity_extraction": 1343
+      }
+    },
+    "duie": {
+      "rows": 20652,
+      "task_counts": {
+        "relation_extraction": 20652
+      }
+    },
+    "pclue": {
+      "rows": 229556,
+      "task_counts": {
+        "classification": 229556
+      }
+    },
+    "clue_official": {
+      "rows": 0,
+      "task_counts": {}
+    },
+    "fewclue_official": {
+      "rows": 0,
+      "task_counts": {}
+    },
+    "instruction_heldout": {
+      "rows": 46465,
+      "task_counts": {
+        "instruction_format": 46465
+      }
+    }
+  },
+  "selected_source_counts": {
+    "belle_train_1m_cn": 206,
+    "cluener2020": 261,
+    "cmrc2018": 528,
+    "coig_cqia": 6,
+    "duie": 277,
+    "lcsts": 266,
+    "pclue": 456
+  },
+  "selected_task_counts": {
+    "classification": 456,
+    "entity_extraction": 261,
+    "instruction_format": 212,
+    "reading_qa": 307,
+    "relation_extraction": 277,
+    "search_info": 221,
+    "summarization": 266
+  },
+  "filter_report": {
+    "dropped_duplicate_text_hash": 0,
+    "dropped_sft_text_hash_overlap": 0,
+    "dropped_sft_core_task_hash_overlap": 0
+  },
+  "seed": 1337,
+  "notes": [
+    "pCLUE eval rows are loaded only from pCLUE_dev/test_public files.",
+    "Official CLUE/FewCLUE rows are used only from dev/validation/test-like paths.",
+    "Structured extraction currently uses char_f1 plus required_json_keys metadata."
+  ]
+}

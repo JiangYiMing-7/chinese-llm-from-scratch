@@ -1,0 +1,54 @@
+{
+  "output": "eval/data/zh_prompt_injection_reading_v2_smoke.jsonl",
+  "reference_task_file": "eval/data/zh_reference_tasks_500m_v2.jsonl",
+  "clean_result_file": null,
+  "seed": 20260614,
+  "base_limit": 20,
+  "selected_base_questions": 20,
+  "examples": 120,
+  "task_types": [
+    "reading_qa",
+    "search_info"
+  ],
+  "sources": [],
+  "attack_types": [
+    "doc_direct_ignore",
+    "doc_authority_spoof",
+    "doc_wrong_answer_hint",
+    "question_direct_ignore"
+  ],
+  "selection": {
+    "reference_rows": 2000,
+    "candidates": 476,
+    "clean_screening": false,
+    "filters": {
+      "dropped_answer_length": 52,
+      "dropped_task_type": 1472
+    }
+  },
+  "variant_counts": {
+    "attack": 80,
+    "benign_noise": 20,
+    "clean_control": 20
+  },
+  "attack_type_counts": {
+    "benign_noise": 20,
+    "doc_authority_spoof": 20,
+    "doc_direct_ignore": 20,
+    "doc_wrong_answer_hint": 20,
+    "none": 20,
+    "question_direct_ignore": 20
+  },
+  "task_type_counts": {
+    "reading_qa": 84,
+    "search_info": 36
+  },
+  "source_counts": {
+    "cmrc2018": 120
+  },
+  "notes": [
+    "This v2 set targets instruction hierarchy / goal hijacking inside short Chinese reading and search tasks.",
+    "ASR should be interpreted as attack-target hit rate, not harmful-content success.",
+    "If clean_result_file is absent, generated rows are static candidates and should be clean-screened before formal reporting."
+  ]
+}

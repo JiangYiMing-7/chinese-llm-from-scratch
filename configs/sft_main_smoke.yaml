@@ -1,0 +1,43 @@
+model:
+  vocab_size: 20000
+  max_seq_len: 1024
+  n_layers: 12
+  n_heads: 12
+  d_model: 768
+  head_dim: 64
+  ffn_hidden_dim: 2048
+  dropout: 0.0
+  rope_theta: 10000.0
+  norm_eps: 1.0e-5
+  tie_embeddings: true
+  bias: false
+
+data:
+  train_path: data/sft/normal_sft_train.jsonl
+  val_path: data/sft/normal_sft_val.jsonl
+  tokenizer_path: data/tokenizer/zh_bpe_20k.model
+  max_seq_len: 1024
+  num_workers: 0
+  default_system: 你是一个中文助手，请根据用户任务给出准确、简洁的回答。
+
+train:
+  init_from: results/runs/main_2b_bf16_fromscratch_bs16_20260523_20260523_182938/checkpoints/best.pt
+  batch_size: 2
+  eval_batch_size: 2
+  max_steps: 20
+  warmup_steps: 2
+  lr: 2.0e-5
+  min_lr: 2.0e-6
+  weight_decay: 0.01
+  grad_clip: 1.0
+  log_interval: 1
+  metrics_interval: 1
+  eval_interval: 10
+  eval_batches: 5
+  save_interval: 20
+  run_dir_root: results/sft_runs
+  run_name: sft_main_smoke
+  seed: 1337
+  device: auto
+  precision: bf16
+

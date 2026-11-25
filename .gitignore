@@ -42,3 +42,12 @@ runs/
 # Secrets
 .env
 *.key
+
+# Training outputs (kept on the server, not in git)
+.pytest_cache/
+data/sft/
+results/runs/
+results/sft_runs/
+results/evals/
+metrics.jsonl
+logs/

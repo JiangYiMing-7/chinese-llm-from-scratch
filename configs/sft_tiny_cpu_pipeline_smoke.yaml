@@ -1,0 +1,43 @@
+model:
+  vocab_size: 20000
+  max_seq_len: 128
+  n_layers: 2
+  n_heads: 4
+  d_model: 128
+  head_dim: 32
+  ffn_hidden_dim: 384
+  dropout: 0.0
+  rope_theta: 10000.0
+  norm_eps: 1.0e-5
+  tie_embeddings: true
+  bias: false
+
+data:
+  train_path: data/sft/normal_sft_train.jsonl
+  val_path: data/sft/normal_sft_val.jsonl
+  tokenizer_path: data/tokenizer/zh_bpe_20k.model
+  max_seq_len: 128
+  num_workers: 0
+  default_system: 你是一个中文助手，请根据用户任务给出准确、简洁的回答。
+
+train:
+  init_from:
+  allow_random_init: true
+  batch_size: 1
+  eval_batch_size: 1
+  max_steps: 2
+  warmup_steps: 1
+  lr: 2.0e-5
+  min_lr: 2.0e-6
+  weight_decay: 0.01
+  grad_clip: 1.0
+  log_interval: 1
+  metrics_interval: 1
+  eval_interval: 1
+  eval_batches: 1
+  save_interval: 2
+  run_dir_root: results/sft_runs
+  run_name: sft_tiny_cpu_pipeline_smoke
+  seed: 1337
+  device: cpu
+  precision: fp32

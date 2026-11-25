@@ -1,0 +1,54 @@
+model:
+  vocab_size: 20000
+  max_seq_len: 1024
+  n_layers: 12
+  n_heads: 12
+  d_model: 768
+  head_dim: 64
+  ffn_hidden_dim: 2048
+  dropout: 0.0
+  rope_theta: 10000.0
+  norm_eps: 1.0e-5
+  tie_embeddings: true
+  bias: false
+  norm_arch: pre_norm
+  ffn_type: moe
+  moe_num_experts: 4
+  moe_top_k: 1
+  moe_expert_hidden_dim: 2048
+  moe_aux_loss_coef: 0.01
+
+data:
+  train_path: data/processed/pretrain_tokens.bin
+  val_path: data/processed/pretrain_val_tokens.bin
+  val_split: 0.0
+  tokenizer_path: data/tokenizer/zh_bpe_20k.model
+  block_size: 1024
+  num_workers: 0
+
+train:
+  batch_size: 16
+  gradient_accumulation_steps: 1
+  max_steps: 200
+  warmup_steps: 20
+  lr: 3.0e-4
+  min_lr: 3.0e-5
+  weight_decay: 0.1
+  grad_clip: 1.0
+  log_interval: 10
+  metrics_interval: 1
+  run_dir_root: results/runs/100m_moe_active100m_test
+  run_name: test_100m_moe_top1_e4_active100m
+  metrics_filename: metrics.jsonl
+  hardware_metrics_interval: 10
+  eval_interval: 50
+  eval_batches: 10
+  save_interval: 100
+  save_best: true
+  best_checkpoint_name: best.pt
+  resume_from: null
+  seed: 1337
+  device: auto
+  precision: bf16
+  track_token_acc: true
+  loss_ema_beta: 0.95

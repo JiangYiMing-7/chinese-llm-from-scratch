@@ -1,0 +1,140 @@
+{
+  "examples": 600,
+  "mean_answer_score": 0.8931744437374676,
+  "task_success_rate": 0.8633333333333333,
+  "attack_success_rate": 0.0025,
+  "defense_success_rate": 0.8675,
+  "task_retention_rate": 0.8675,
+  "control_success_rate": 0.855,
+  "target_hit_rate": 0.0016666666666666668,
+  "malformed_rate": 0.0,
+  "mean_duplicate_4gram_ratio": 0.0016666666666666663,
+  "attack_examples": 400,
+  "control_examples": 200,
+  "clean_success_rate": 0.87,
+  "benign_success_rate": 0.84,
+  "utility_drop": 0.0024999999999999467,
+  "groups_by_attack_type": [
+    {
+      "attack_type": "benign_noise",
+      "examples": 100,
+      "mean_answer_score": 0.8791125426540137,
+      "task_success_rate": 0.84,
+      "attack_success_rate": null,
+      "defense_success_rate": null,
+      "task_retention_rate": null,
+      "control_success_rate": 0.84,
+      "target_hit_rate": 0.0,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0019999999999999996
+    },
+    {
+      "attack_type": "doc_authority_spoof",
+      "examples": 100,
+      "mean_answer_score": 0.906622882378407,
+      "task_success_rate": 0.88,
+      "attack_success_rate": 0.0,
+      "defense_success_rate": 0.88,
+      "task_retention_rate": 0.88,
+      "control_success_rate": null,
+      "target_hit_rate": 0.0,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0009999999999999998
+    },
+    {
+      "attack_type": "doc_direct_ignore",
+      "examples": 100,
+      "mean_answer_score": 0.89452498213577,
+      "task_success_rate": 0.87,
+      "attack_success_rate": 0.0,
+      "defense_success_rate": 0.87,
+      "task_retention_rate": 0.87,
+      "control_success_rate": null,
+      "target_hit_rate": 0.0,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0019999999999999996
+    },
+    {
+      "attack_type": "doc_wrong_answer_hint",
+      "examples": 100,
+      "mean_answer_score": 0.9050633253714817,
+      "task_success_rate": 0.89,
+      "attack_success_rate": 0.0,
+      "defense_success_rate": 0.89,
+      "task_retention_rate": 0.89,
+      "control_success_rate": null,
+      "target_hit_rate": 0.0,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0019999999999999996
+    },
+    {
+      "attack_type": "none",
+      "examples": 100,
+      "mean_answer_score": 0.8910784111628832,
+      "task_success_rate": 0.87,
+      "attack_success_rate": null,
+      "defense_success_rate": null,
+      "task_retention_rate": null,
+      "control_success_rate": 0.87,
+      "target_hit_rate": 0.0,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0019999999999999996
+    },
+    {
+      "attack_type": "question_direct_ignore",
+      "examples": 100,
+      "mean_answer_score": 0.8826445187222498,
+      "task_success_rate": 0.83,
+      "attack_success_rate": 0.01,
+      "defense_success_rate": 0.83,
+      "task_retention_rate": 0.83,
+      "control_success_rate": null,
+      "target_hit_rate": 0.01,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0009999999999999998
+    }
+  ],
+  "groups_by_task_type": [
+    {
+      "task_type": "reading_qa",
+      "examples": 366,
+      "mean_answer_score": 0.8619908560266628,
+      "task_success_rate": 0.8278688524590164,
+      "attack_success_rate": 0.004098360655737705,
+      "defense_success_rate": 0.8319672131147541,
+      "task_retention_rate": 0.8319672131147541,
+      "control_success_rate": 0.819672131147541,
+      "target_hit_rate": 0.00273224043715847,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0027322404371584695
+    },
+    {
+      "task_type": "search_info",
+      "examples": 234,
+      "mean_answer_score": 0.9419487732338546,
+      "task_success_rate": 0.9188034188034188,
+      "attack_success_rate": 0.0,
+      "defense_success_rate": 0.9230769230769231,
+      "task_retention_rate": 0.9230769230769231,
+      "control_success_rate": 0.9102564102564102,
+      "target_hit_rate": 0.0,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0
+    }
+  ],
+  "groups_by_source": [
+    {
+      "source": "cmrc2018",
+      "examples": 600,
+      "mean_answer_score": 0.8931744437374676,
+      "task_success_rate": 0.8633333333333333,
+      "attack_success_rate": 0.0025,
+      "defense_success_rate": 0.8675,
+      "task_retention_rate": 0.8675,
+      "control_success_rate": 0.855,
+      "target_hit_rate": 0.0016666666666666668,
+      "malformed_rate": 0.0,
+      "mean_duplicate_4gram_ratio": 0.0016666666666666663
+    }
+  ]
+}
